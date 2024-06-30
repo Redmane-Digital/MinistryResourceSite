@@ -1,0 +1,36 @@
+fragment ContinuousIntegration on ContinuousIntegration {
+  stage
+  remoteId: id
+  createdAt
+  updatedAt
+  publishedAt
+  randomNumber
+  createdBy {
+    ... on User {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+  updatedBy {
+    ... on User {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+  publishedBy {
+    ... on User {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+  scheduledIn {
+    ... on ScheduledOperation {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+}

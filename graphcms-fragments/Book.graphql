@@ -1,0 +1,48 @@
+fragment Book on Book {
+  stage
+  publishedAt
+  updatedAt
+  createdAt
+  remoteId: id
+  title
+  author
+  price
+  link
+  publishedBy {
+    ... on User {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+  updatedBy {
+    ... on User {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+  createdBy {
+    ... on User {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+  image {
+    ... on Asset {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+  }
+  tags
+  scheduledIn {
+    ... on ScheduledOperation {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+}

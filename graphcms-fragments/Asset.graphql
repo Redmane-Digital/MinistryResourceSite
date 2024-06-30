@@ -1,0 +1,108 @@
+fragment Asset on Asset {
+  stage
+  locale
+  remoteId: id
+  createdAt(variation: COMBINED)
+  updatedAt(variation: COMBINED)
+  publishedAt(variation: COMBINED)
+  handle
+  fileName
+  height
+  width
+  size
+  mimeType
+  createdBy {
+    ... on User {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+  updatedBy {
+    ... on User {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+  publishedBy {
+    ... on User {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+  heroImageCategory {
+    ... on Category {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+  }
+  thumbnailCategory {
+    ... on Category {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+  }
+  testimonialImage {
+    ... on Testimonial {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+  featuredBookCover {
+    ... on FeaturedBook {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+  partnerLogo {
+    ... on Partner {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+  resourceThumbnail {
+    ... on Resource {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+  resourceFileAsset {
+    ... on ResourceFile {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+  courseOneThumbnailFeaturedTraining {
+    ... on FeaturedTraining {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+  courseTwoThumbnailFeaturedTraining {
+    ... on FeaturedTraining {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+  scheduledIn {
+    ... on ScheduledOperation {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+  url
+}

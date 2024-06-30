@@ -1,0 +1,63 @@
+fragment Category on Category {
+  stage
+  locale
+  remoteId: id
+  createdAt(variation: COMBINED)
+  updatedAt(variation: COMBINED)
+  publishedAt(variation: COMBINED)
+  slug
+  title
+  description
+  displayOrder
+  createdBy {
+    ... on User {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+  updatedBy {
+    ... on User {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+  publishedBy {
+    ... on User {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+  heroImage {
+    ... on Asset {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+  }
+  thumbnail {
+    ... on Asset {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+  }
+  resource {
+    ... on Resource {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+  scheduledIn {
+    ... on ScheduledOperation {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+}
