@@ -71,5 +71,4 @@ yarn-error.log
 # Firebase
 .firebase
 .firebase/
-firebase.json
 .firebaserc

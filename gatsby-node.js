@@ -11,7 +11,6 @@ const { createStorefrontApiClient } = require("@shopify/storefront-api-client")
 const webpack = require("webpack")
 const path = require("path")
 const fs = require("fs")
-const additionalLanguages = ["es"]
 const crypto = require("crypto")
 
 // secret or salt to be hashed with
@@ -447,7 +446,7 @@ async function createPagesFromCMSData(createPage) {
   })
 
   // Create individual BOOK pages
-  const booksArray = Object.values(memo.books);
+  const booksArray = Object.values(memo.books)
   booksArray.forEach(async book => {
     book.type = "book"
     book.title = {
@@ -491,11 +490,11 @@ async function createPagesFromCMSData(createPage) {
           ...area,
           localizationsArray: area.localizations,
           localizations: area.localizations?.reduce((obj, localization) => {
-            if (area.localizations.length === 0) return obj;
+            if (area.localizations.length === 0) return obj
 
             return {
               ...obj,
-              [localization.locale]: localization
+              [localization.locale]: localization,
             }
           }, {}),
         }
@@ -519,7 +518,7 @@ async function createPagesFromCMSData(createPage) {
     ...memo.raw.cms.allHygraphCourseBundles.map(node => ({
       node: node,
     })),
-  ];
+  ]
 
   createPage({
     path: `/search`,
@@ -550,15 +549,15 @@ async function prepConfig() {
       en: memo.config.privacyPolicy.html,
       es: resolveLocalization("privacyPolicy.html", "es", memo.config),
     },
-  };
+  }
 
   // Update partners contentArea with partners data from config
   for (const area of memo.raw.cms.homepage.contentAreas) {
     if (area.type === "Partners") {
-      area.data = memo.config.partners;
-      break;
+      area.data = memo.config.partners
+      break
     }
-  };
+  }
 
   // Remove unnecessary data
   delete memo.config.localizations
@@ -681,6 +680,15 @@ exports.createPages = async ({ graphql, actions }) => {
     query allResources {
       Hygraph {
         siteConfig(where: { title: "Mannahouse Resource" }) {
+          localizations(includeCurrent: true, locales: [en, es]) {
+            locale
+            aboutSite {
+              html
+            }
+            privacyPolicy {
+              html
+            }
+          }
           aboutSite {
             html
           }
