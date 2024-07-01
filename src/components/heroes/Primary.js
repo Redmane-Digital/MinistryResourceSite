@@ -11,10 +11,7 @@ const Hero = ({ imgSources, title, heading = false, imagePosition = 'center bott
     return (
         <HeroSection style={{ minHeight: 300 }} className="position-relative" position={imagePosition} imgSources={imgSources} imgStyles={imgStyles}>
             <div
-                className="py-4"
-                style={{
-                    background: 'rgba(15,56,90,0.85)'
-                }}
+                className="py-4 bg-secondary-85"
             >
                 <div className={`container ${reducedWidth && 'reduced-width'} text-white`}>
                     <h2 className="mb-0 font-weight-bold">{title}</h2>

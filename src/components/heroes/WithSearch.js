@@ -28,10 +28,7 @@ const Hero = ({
       }}
     >
       <div
-        className="py-4"
-        style={{
-          background: "rgba(15,56,90,0.85)",
-        }}
+        className="py-4 bg-secondary-85"
       >
         <div className={`container text-white ${heroWidth}`}>
           <h2 className="mb-0 font-weight-bold">{title}</h2>

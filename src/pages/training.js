@@ -14,7 +14,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons"
 import { Link } from "gatsby"
 import { useTranslations, useTranslateContext } from "gatsby-plugin-translate"
-import { translateLink } from "../hooks/"
 
 // pics
 import dos from "../images/trainDos.jpg"
@@ -151,7 +150,7 @@ const Train = ({ location }) => {
         title={t`Training`}
         description={t`Elevate your ministry with our specially curated selection of training resources. Dive into expert-led sessions designed to empower pastors, worship leaders, and church staff.`}
       />
-      <section className="bg-secondary">
+      <section className="bg-secondary-85">
         <div className="container reduced-width py-4">
           <h4 className="text-white mb-0">
             <strong>{t`Training`}</strong>

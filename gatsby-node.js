@@ -1,8 +1,9 @@
-/**
- * Implement Gatsby's Node APIs in this file.
- *
- * See: https://www.gatsbyjs.com/docs/node-apis/
- */
+/************************************************************************************************
+ *                               IMPORTANT LICENSE INFORMATION                                  *
+ * This file is part of Ministry Resource Sity by Redmane Digital which is released under RDSL. *
+ * See file LICENSE for full license details.                                                   *
+ ************************************************************************************************/
+
 require("dotenv").config({
   path: `.env.${process.env.NODE_ENV}`,
 })
@@ -16,7 +17,6 @@ const crypto = require("crypto")
 // secret or salt to be hashed with
 const secret = "mhresource"
 const fetch = require("node-fetch")
-// const { config } = require("process")
 
 // Memo for data fetching
 const memo = {
@@ -27,10 +27,82 @@ const memo = {
   config: {},
 }
 
-// Data for translation caching
-const cachedTranslations = {}
+/**
+ * Takes in the config object and updates the SCSS variables with the data from Hygraph
+ * @param {object} config The config object from Hygraph 
+ */
+const assignWhitelabelSettings = (config) => {
+  const { whitelabelColors: colors, copyrightInformation } = config;
+      
+  let variables = fs.readFileSync(`./src/components/styles/scss/_variables.scss`, {encoding: "utf8"});
+  if (variables) {
+    let regex = new RegExp(`\\$primary:[^;]*`, 'gmi');
+    variables = variables.replace(regex, `$primary: ${colors.primary.hex} !default`);
 
+    regex = new RegExp(`\\$secondary:[^;]*`, 'gmi');
+    variables = variables.replace(regex, `$secondary: ${colors.secondary.hex} !default`);
+
+    regex = new RegExp(`\\$buttons:[^;]*`, 'gmi');
+    variables = variables.replace(regex, `$buttons: ${colors.buttons?.hex || colors.primary.hex} !default`);
+
+    regex = new RegExp(`\\$navbar:[^;]*`, 'gmi');
+    variables = variables.replace(regex, `$navbar: ${colors.navbar?.hex || colors.primary.hex} !default`);
+
+    regex = new RegExp(`\\$footer:[^;]*`, 'gmi');
+    variables = variables.replace(regex, `$footer: ${colors.footer?.hex || colors.secondary.hex} !default`);
+
+    fs.writeFileSync(`./src/components/styles/scss/_variables.scss`, variables);
+  }
+
+  let copyrightJs = fs.readFileSync(`./src/components/universal/Footer.js`, {encoding: "utf8"});
+  if (copyrightJs) {
+    copyrightJs = copyrightJs
+      .replace(
+        /(?!(<small>Copyright\s©{year}\s))[\w][a-z0-9\.\s\']*(?=,\sAll Rights Reserved.<\/small>)/gmi, 
+        copyrightInformation.copyrightOwner
+      );
+    
+    fs.writeFileSync(`./src/components/universal/Footer.js`, copyrightJs);
+  }
+};
+
+// Takes in a Hygraph object and returns the same data in the schema for a Shopify object
+function conformHygraphToShopifySchema (data) {
+  const handle = data.title.replaceAll(/([^A-Z\s])/gi, '').replaceAll(/\s/gi, '-');
+
+  Object.assign(data, {
+    title: {
+      en: data.title,
+      es: data.title
+    },
+    isExternal: true,
+    handle: handle,
+    tags: [data.category],
+    variants: [
+      {
+        price: data.price,
+        handle: handle,
+        compareAtPrice: false,
+        img: data.image.url
+      }
+    ]
+  });
+
+  return data;
+}
+
+/**
+ * This function will take a string and a language code and return the translated string.
+ * It will first check if the translation is cached in the cachedTranslations object.
+ * If it is not, it will fetch the translation from the Google Translate API and cache it.
+ * 
+ * @param {string} str The string to be translated
+ * @param {string} lang The desired output language
+ * @returns The translated string
+ */
 async function translate(str, lang) {
+  // Data for translation caching
+  const cachedTranslations = {}
   // create a sha-256 hasher
   const sha256Hasher = crypto.createHmac("sha256", secret)
   // hash the string and set the output format
@@ -80,6 +152,13 @@ async function translate(str, lang) {
   }
 }
 
+/**
+ * 
+ * @param {string} key The dot-separated path to the value in the object
+ * @param {*} lang The language to resolve the value in
+ * @param {*} node The object containing a localizations key, in which to to search for the value
+ * @returns The localized value at the path in the object, or the default value if the path does not exist
+ */
 function resolveLocalization(key, lang, node) {
   const localization = node.localizations?.find(
     localization => localization.locale === lang
@@ -92,6 +171,11 @@ function resolveLocalization(key, lang, node) {
     : searchObject(node, pathArray)
 }
 
+/**
+ * @param {object} obj The object to extract a value from
+ * @param {array} pathArray The path to the value in the object, as an array of keys
+ * @returns The value at the path in the object, or undefined if the path does not exist
+ */
 function searchObject(obj, pathArray) {
   let node = obj
   for (const index in pathArray) {
@@ -99,7 +183,7 @@ function searchObject(obj, pathArray) {
     if (key in node) {
       node = node[key]
     } else {
-      node = null
+      node = undefined
       break
     }
   }
@@ -561,6 +645,8 @@ async function prepConfig() {
 
   // Remove unnecessary data
   delete memo.config.localizations
+
+  assignWhitelabelSettings(memo.config)
 }
 
 /*******************************************************************
@@ -745,11 +831,11 @@ exports.createPages = async ({ graphql, actions }) => {
               css
               hex
             }
-            colorPrimary {
+            primary {
               css
               hex
             }
-            colorSecondary {
+            secondary {
               hex
               css
             }
@@ -757,7 +843,7 @@ exports.createPages = async ({ graphql, actions }) => {
               hex
               css
             }
-            header {
+            navbar {
               css
               hex
             }
@@ -907,7 +993,10 @@ exports.createPages = async ({ graphql, actions }) => {
         }
       }
     }
-  `).then(async result => result.data.Hygraph)
+  `).then(async result => {
+    console.log(result);
+    return result.data.Hygraph
+  })
 
   await prepConfig()
   await createPagesFromCMSData(createPage)

@@ -65,14 +65,18 @@ $colors: (
 ) !default;
 // scss-docs-end colors-map
 
-$primary:       $mannahouse-red !default;
-$secondary:     $mannahouse-blue !default;
-$success:       $green !default;
-$info:          $cyan !default;
-$warning:       $yellow !default;
-$danger:        $red !default;
-$light:         $gray-200 !default;
-$dark:          $gray-800 !default;
+$primary: #008723 !default;
+$secondary: #cd20ab !default;
+$success: $green !default;
+$info: $cyan !default;
+$warning: $yellow !default;
+$danger: $red !default;
+$light: $gray-200 !default;
+$dark: $gray-800 !default;
+$navbar: #ef4123 !default;
+$footer: #111c30 !default;
+$buttons: #da78be !default;
+$secondary-85: rgba($secondary, .84) !default;
 
 // scss-docs-start theme-colors-map
 $theme-colors: (
@@ -84,6 +88,9 @@ $theme-colors: (
   "danger":     $danger,
   "light":      $light,
   "dark":       $dark,
+  "navbar":     $navbar,
+  "footer":     $footer,
+  "secondary-85": $secondary-85,
   "tan":        $mannahouse-yellow
 ) !default;
 // scss-docs-end theme-colors-map

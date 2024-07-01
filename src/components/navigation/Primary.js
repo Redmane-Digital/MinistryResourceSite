@@ -46,7 +46,7 @@ const PrimaryNav = (props) => {
 
     return (
         <>
-            <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+            <nav className="navbar navbar-expand-lg navbar-dark bg-navbar">
                 <div className="container">
                     <Link to={translateLink("/", language)} className="navbar-brand mb-0 h1">
                         <img src={Logo} style={{ height: 55 }} alt="Mannahouse Resource" />
