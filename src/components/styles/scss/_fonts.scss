@@ -1,0 +1,55 @@
+@font-face {
+    font-family: "Kapra Neue";
+    src: url(../fonts/KapraNeue-RegularCondensed.otf);
+}
+
+@font-face {
+    font-family: "Maax";
+    src: url(../fonts/Maax.otf);
+}
+
+@font-face {
+    font-family: "Maax";
+    src: url(../fonts/Maax-Bold.otf);
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Maax";
+    src: url(../fonts/Maax-Medium.otf);
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Maax";
+    src: url(../fonts/Maax-BoldItalic.otf);
+    font-weight: 600;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Freight Pro";
+    src: url(../fonts/FreightTextProBold-Italic.otf);
+    font-weight: bold;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Freight Pro";
+    src: url(../fonts/FreightTextProBook-Regular.otf);
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+.kapra {
+    font-family: "Kapra Neue";
+    text-transform: uppercase;
+}
+
+.freight {
+    font-family: "Freight Pro"
+}
+

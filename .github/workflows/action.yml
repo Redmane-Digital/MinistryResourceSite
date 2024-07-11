@@ -1,0 +1,37 @@
+name: Build and Deploy
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    env:
+      SHOPIFY_KEY: ${{ secrets.SHOPIFY_KEY }}
+      GRAPHCMS_ENDPOINT: ${{ secrets.GRAPHCMS_ENDPOINT }}
+      FIREBASE_KEY: ${{ secrets.FIREBASE_KEY }}
+      FIREBASE_DOMAIN: ${{ secrets.FIREBASE_DOMAIN }}
+      FIREBASE_DB_URL: ${{ secrets.FIREBASE_DB_URL }}
+      FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+      FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
+      FIREBASE_SENDER_ID: ${{ secrets.FIREBASE_SENDER_ID }}
+      FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+        with:
+          ref: main
+      - name: Install Dependencies
+        run: yarn
+      - name: Build
+        run: yarn build
+      - name: Deploy to Firebase
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_MANNAHOUSE_RESOURCE_CENTER }}'
+          channelId: live
+          projectId: mannahouse-resource-center

@@ -1,0 +1,1 @@
+export const booksImg = 'https://firebasestorage.googleapis.com/v0/b/mannahouse-resource-center.appspot.com/o/heroes%2Fhero__books.jpg?alt=media&token=9005cae4-97d1-4c16-be1a-610a94a987a6';

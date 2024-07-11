@@ -1,0 +1,77 @@
+fragment Resource on Resource {
+  stage
+  remoteId: id
+  createdAt
+  updatedAt
+  publishedAt
+  title
+  slug
+  description {
+    ... on RichText {
+      raw
+      html
+      markdown
+      text
+    }
+  }
+  vimeoUrl
+  createdBy {
+    ... on User {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+  updatedBy {
+    ... on User {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+  publishedBy {
+    ... on User {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+  categories {
+    ... on Category {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+  }
+  tags {
+    ... on Tag {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+  thumbnail {
+    ... on Asset {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+  }
+  downloads {
+    ... on ResourceFile {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+  contentTypes
+  scheduledIn {
+    ... on ScheduledOperation {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+}

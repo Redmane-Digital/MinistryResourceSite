@@ -1,0 +1,57 @@
+fragment FeaturedTraining on FeaturedTraining {
+  stage
+  remoteId: id
+  createdAt
+  updatedAt
+  publishedAt
+  courseOneTitle
+  courseOneDescription
+  courseOneUrl
+  courseTwoTitle
+  courseTwoDescription
+  courseTwoUrl
+  createdBy {
+    ... on User {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+  updatedBy {
+    ... on User {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+  publishedBy {
+    ... on User {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+  courseOneThumbnail {
+    ... on Asset {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+  }
+  courseTwoThumbnail {
+    ... on Asset {
+      remoteTypeName: __typename
+      remoteId: id
+      locale
+      stage
+    }
+  }
+  scheduledIn {
+    ... on ScheduledOperation {
+      remoteTypeName: __typename
+      remoteId: id
+      stage
+    }
+  }
+}

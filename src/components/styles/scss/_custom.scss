@@ -1,0 +1,146 @@
+body {
+  overflow-x: hidden;
+}
+
+#gatsby-focus-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.box-shadow {
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+}
+
+.img-grid-item {
+  position: relative;
+  padding: 0 0.75rem 1.5rem !important;
+  margin-bottom: 0 !important;
+
+  &-image {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  &-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    transition: .5s ease;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+
+  &:hover .img-grid-item-overlay {
+    background-color: $primary-85;
+  }
+
+  &-text {
+    color: white;
+    font-size: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+}
+
+// Testimonials Carousel
+
+.testimonial-image {
+  width: 75px;
+}
+
+.quote-icon {
+  opacity: 0.1;
+  height: 40px;
+}
+
+.splide__slider {
+  padding-bottom: 50px;
+}
+
+.splide__slide {
+  transition: 300ms opacity ease;
+  >div {
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.05);
+    user-select: none;
+  }
+}
+
+.splide__pagination__page {
+  background: #ef4123 !important;
+  opacity: 0.5;
+
+  &.is-active {
+    background: #ef4123 !important;
+    opacity: 1;
+  }
+}
+
+@media only screen and (min-width: 1024px) {
+  .splide__slide {
+    opacity: 0.5;
+
+    &:not(&.is-active) {
+      box-shadow: none;
+    }
+
+    &.is-active {
+      opacity: 1;
+    }
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.mhr-signin {
+    margin: 25px 0 15px;
+    text-align: center;
+}
+.mhr-btn {
+    display: inline-block;
+    margin: 15px auto 0;
+}
+.mhr-btn img {
+    max-width: 400px;
+    width: 100%;
+}
+.text-divider {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  --text-divider-gap: 1rem;
+}
+.text-divider::before, .text-divider::after {
+content: "";
+  height: 1px;
+  background-color: silver;
+  flex-grow: 1;
+}
+.text-divider::before {
+  margin-right: var(--text-divider-gap);
+}
+.text-divider::after {
+  margin-left: var(--text-divider-gap);
+}
+
+.truncate-search {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.object-fit-cover {
+  object-fit: cover;
+}
