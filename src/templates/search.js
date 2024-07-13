@@ -131,7 +131,7 @@ const CourseResult = ({ result, language, t }) => {
           className="col-12 col-md-4 text-dark"
         >
           <picture>
-            <source srcset={result.course_card_image_url} type="image/jpg" />
+            <source srcSet={result.course_card_image_url} type="image/jpg" />
             <img
               src={coursePlaceholder}
               alt={result.name[language] + ' image'}
@@ -166,6 +166,10 @@ const CourseResult = ({ result, language, t }) => {
 }
 
 const Result = (props) => {
+  if (!props.result.type) {
+    return null;
+  }
+
   const lookup = {
     resource: ResourceResult,
     book: BookResult,
@@ -174,7 +178,8 @@ const Result = (props) => {
 
   const Render = lookup[props.result.type]
 
-  return <Render {...props} />
+  return <Render {...props} />;
+
 }
 
 const Search = ({ location, pageContext }) => {
@@ -277,7 +282,6 @@ const Search = ({ location, pageContext }) => {
           const keywordsArr = res.item.node.keywords.length 
             ? res.item.node.keywords.split('\n') 
             : [];
-          console.log(keywordsArr);
           isMatch = keywordsArr.some(keyword => {
             return categoriesArr.includes(slugify(keyword));
           })
@@ -289,8 +293,6 @@ const Search = ({ location, pageContext }) => {
 
         return isMatch;
       });
-
-      console.log(tmp);
     }
 
     setResults(tmp)
@@ -311,7 +313,7 @@ const Search = ({ location, pageContext }) => {
     const threshold = strict && strict.toLowerCase() == "true" ? 0.0 : 0.0
 
     if (productTypes.resources) tmp.push(...resources)
-    if (productTypes.books) tmp.push(...books.edges)
+    if (productTypes.books) tmp.push(...books)
     if (productTypes.training && courses) tmp.push(...courses.edges)
 
     const options = {

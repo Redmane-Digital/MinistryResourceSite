@@ -43,8 +43,6 @@ const CategoriesGrid = ({ data, linkToSearch }) => {
   return data.map((edge, i) => {
     const { slug, title, thumbnail } = edge
 
-    console.log(edge);
-
     ratio = i < 2 ? "ratio ratio-16x7" : "ratio ratio-16x9"
     lg = i < 2 ? 6 : i < 5 ? 4 : 3
     sm = i < 3 ? 12 : 6

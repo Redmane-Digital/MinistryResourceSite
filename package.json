@@ -83,5 +83,10 @@
   },
   "overrides": {
     "react-error-overlay": "6.0.9"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "es5",
+    "semi": true
   }
 }
