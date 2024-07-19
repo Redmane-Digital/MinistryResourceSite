@@ -4,54 +4,53 @@
  * See file LICENSE for full license details.                                                   *
  ************************************************************************************************/
 
-import React from "react"
-import Hero from "../components/heroes/Resources"
-import StartSearching from "../components/universal/search/StartSearching"
+import React from 'react';
+import Hero from '../components/heroes/Resources';
+import StartSearching from '../components/universal/search/StartSearching';
 import {
   Categories,
   BooksHero,
   FeaturedResources,
   Partners,
   MoreFeaturedResources,
-} from "../components/pages/resources"
-import Layout from "../components/layout"
-import SEO from "../components/seo"
-import { useTranslations } from "gatsby-plugin-translate"
+} from '../components/pages/resources';
+import Layout from '../components/layout';
+import SEO from '../components/seo';
+import { useTranslations } from 'gatsby-plugin-translate';
 
 // A helper function to dynamically render the content areas according to their type, order, and presence in the data
 function RenderContentAreas({ data }) {
   const lookup = {
     Partners,
-    "Featured Book": BooksHero,
-    "FeaturedTraining": FeaturedResources,
-    "More Featured Resources": MoreFeaturedResources,
-  }
+    FeaturedBook: BooksHero,
+    FeaturedTraining: FeaturedResources,
+    MoreFeaturedResources: MoreFeaturedResources,
+  };
 
   let index = -1;
 
-  return data
-    .map((contentArea) => {
-      const ContentArea = lookup[contentArea.type]
-      
-      if (!ContentArea) return null
-      
-      index++;
+  return data.map((contentArea) => {
+    const ContentArea = lookup[contentArea.type];
 
-      return (
-        <ContentArea
-          data={contentArea.data ? contentArea.data : contentArea}
-          bgClass={index % 2 !== 0 ? "" : "bg-light"}
-        />
-      )
-    });
+    if (!ContentArea) return null;
+
+    index++;
+
+    return (
+      <ContentArea
+        data={contentArea.data ? contentArea.data : contentArea}
+        bgClass={index % 2 !== 0 ? '' : 'bg-light'}
+      />
+    );
+  });
 }
 
 // Default export for the Home template
 function Home({ location, pageContext }) {
-  const t = useTranslations()
+  const t = useTranslations();
   const { categories, contentAreas, config } = pageContext;
 
-  console.log(pageContext)
+  console.log(pageContext);
 
   return (
     <Layout location={location}>
@@ -64,7 +63,7 @@ function Home({ location, pageContext }) {
       <Categories data={categories} linkToSearch={true} />
       <RenderContentAreas data={contentAreas} />
     </Layout>
-  )
+  );
 }
 
-export default Home
+export default Home;

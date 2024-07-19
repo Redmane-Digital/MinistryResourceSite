@@ -95,10 +95,10 @@ export const Categories = ({ data, linkToSearch = false }) => {
 };
 
 export const BooksHero = ({ data }) => {
-  const state = data;
-  const { cover, title, author, description, link } = state;
   const t = useTranslations();
   const { language } = useTranslateContext();
+  const state = data.localizations[language];
+  const { cover, title, author, description, link } = state;
 
   return (
     <section>
@@ -116,15 +116,15 @@ export const BooksHero = ({ data }) => {
           <div className="col-12 col-sm-5 col-md-4 col-lg-3">
             <img
               src={cover.url}
-              alt={`Cover for ${title[language]} by ${author}`}
+              alt={`Cover for ${title} by ${author}`}
               className="w-100"
               loading="lazy"
             />
           </div>
           <div className="col-12 offset-lg-1 col-sm-7 col-md-8 d-flex align-items-center mt-3 mt-sm-0 mb-sm-5">
             <span>
-              <h1 className="mb-4 kapra">{title[language]}</h1>
-              <div className="mb-4">{parse(description.html[language])}</div>
+              <h1 className="mb-4 kapra">{title}</h1>
+              <div className="mb-4">{parse(description)}</div>
               <Link to={translateLink(`/book/${link}`, language)}>
                 <input
                   type="button"
