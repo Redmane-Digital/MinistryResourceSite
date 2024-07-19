@@ -4,53 +4,53 @@
  * See file LICENSE for full license details.                                                   *
  ************************************************************************************************/
 
-import React, { useEffect, useState } from "react"
-import { removeStopwords } from "stopword"
-import heroImg from "../images/training.jpg"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faSearch } from "@fortawesome/free-solid-svg-icons"
-import { useQueryString, translateLink } from "../hooks"
-import Layout from "../components/layout"
-import SEO from "../components/seo"
-import placeholder from "../images/placeholder.jpeg"
-import coursePlaceholder from "../images/course-placeholder.jpg";
-import { Link, navigate } from "gatsby"
-import parse from "html-react-parser"
-import ContentTypeIcon from "../components/universal/ui/ContentTypeIcon"
-import Fuse from "fuse.js"
-import { useTranslateContext, useTranslations } from "gatsby-plugin-translate"
+import React, { useEffect, useState } from 'react';
+import { removeStopwords } from 'stopword';
+import heroImg from '../images/training.jpg';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { useQueryString, translateLink } from '../hooks';
+import Layout from '../components/layout';
+import SEO from '../components/seo';
+import placeholder from '../images/placeholder.jpeg';
+import coursePlaceholder from '../images/course-placeholder.jpg';
+import { Link, navigate } from 'gatsby';
+import parse from 'html-react-parser';
+import ContentTypeIcon from '../components/universal/ui/ContentTypeIcon';
+import Fuse from 'fuse.js';
+import { useTranslateContext, useTranslations } from 'gatsby-plugin-translate';
 
 const stopwords = {
-  en: ["a", "the", "in", "of", "is", "do", "did", "by"],
-  es: ["un", "una", "en", "de"],
-}
+  en: ['a', 'the', 'in', 'of', 'is', 'do', 'did', 'by'],
+  es: ['un', 'una', 'en', 'de'],
+};
 
-const slugify = input => {
+const slugify = (input) => {
   if (!input) {
-    return ""
+    return '';
   }
 
   // make lower case and trim
-  var slug = input.toLowerCase().trim()
+  var slug = input.toLowerCase().trim();
 
   // remove accents from charaters
-  slug = slug.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+  slug = slug.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
   // Replace & with 'and'
-  slug = slug.replace(/\&/g, "and")
+  slug = slug.replace(/\&/g, 'and');
 
   // replace invalid chars with spaces
-  slug = slug.replace(/[^a-z0-9\s-]/g, " ").trim()
+  slug = slug.replace(/[^a-z0-9\s-]/g, ' ').trim();
 
   // replace multiple spaces or hyphens with a single hyphen
-  slug = slug.replace(/[\s-]+/g, "-")
+  slug = slug.replace(/[\s-]+/g, '-');
 
-  return slug
-}
+  return slug;
+};
 
 const ResourceResult = ({ result, language }) => {
   return (
-    <div className="row gx-5 mb-4">
+    <div className="row gx-5 mb-5">
       <div className="col-12 col-md-5">
         <Link
           to={translateLink(`/resource/${result.slug}`, language)}
@@ -63,37 +63,36 @@ const ResourceResult = ({ result, language }) => {
           />
         </Link>
       </div>
-      <div className="col-12 col-md-7">
+      <div className="col-12 col-md-7 pl-md-0">
         <Link
           to={translateLink(`/resource/${result.slug}`, language)}
-          className="font-weight-bold h3 text-dark"
+          className="font-weight-bold h4 text-dark"
         >
           {result.title[language]}
         </Link>
-        <p className="mt-3 truncate-search">
+        <div className="my-2 truncate-search">
           {result.description && parse(result.description.html[language])}
-        </p>
-        <p className="mt-3">
+        </div>
+        <div>
           {result.contentTypes &&
             result.contentTypes.map((type, index) => {
-              return <ContentTypeIcon contentType={type} key={'icon_' + index} />
+              return (
+                <ContentTypeIcon contentType={type} key={'icon_' + index} />
+              );
             })}
-        </p>
+        </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 const BookResult = ({ result, language }) => {
   return (
-    <div className="row gx-5 mb-4">
+    <div className="row gx-5 mb-5">
       <div className="col-12 col-md-5">
         <div className="ratio ratio-16x9">
           <Link
-            to={translateLink(
-              `/book/${result.handle}`,
-              language
-            )}
+            to={translateLink(`/book/${result.handle}`, language)}
             className="d-flex justify-content-center p-2"
             style={{
               backgroundImage: `linear-gradient(to top, #d5d4d0 0%, #d5d4d0 1%, #eeeeec 31%, #efeeec 75%, #e9e9e7 100%)`,
@@ -107,25 +106,27 @@ const BookResult = ({ result, language }) => {
           </Link>
         </div>
       </div>
-      <div className="col-12 col-md-7">
+      <div className="col-12 col-md-7 pl-md-0">
         <Link
           to={translateLink(`/book/${result.handle}`, language)}
-          className="font-weight-bold h3 text-dark"
+          className="font-weight-bold h4 text-dark"
         >
           {result.title[language]}
         </Link>
-        <p className="mt-3 truncate-search">{result.vendor}</p>
+        <p className="my-2 truncate-search">{result.vendor}</p>
       </div>
     </div>
-  )
-}
+  );
+};
 
 const CourseResult = ({ result, language, t }) => {
   return (
-    <div className="row gx-5 mb-4">
+    <div className="row gx-5 mb-5">
       <div className="col-12 col-md-5">
         <a
-          href={`https://www.pbcaccess.com/${result.subtype || result.type}s/${result.slug}`}
+          href={`https://www.pbcaccess.com/${result.subtype || result.type}s/${
+            result.slug
+          }`}
           target="_blank"
           rel="nofollow noopener"
           className="col-12 col-md-4 text-dark"
@@ -140,30 +141,30 @@ const CourseResult = ({ result, language, t }) => {
           </picture>
         </a>
       </div>
-      <div className="col-12 col-md-7">
+      <div className="col-12 col-md-7 pl-md-0">
         <a
-          href={`https://www.pbcaccess.com/${result.subtype || result.type}s/${result.slug}`}
+          href={`https://www.pbcaccess.com/${result.subtype || result.type}s/${
+            result.slug
+          }`}
           target="_blank"
           rel="nofollow noopener"
-          className="font-weight-bold h3 text-dark"
+          className="font-weight-bold h4 text-dark"
         >
           {result.name[language]}
         </a>
-        {result.instructor?.first_name &&
+        {result.instructor?.first_name && (
           <p class="mt-3">
-            <strong>{t`Instructor`}:</strong>{" "}
-            {result.instructor.first_name}{" "}
+            <strong>{t`Instructor`}:</strong> {result.instructor.first_name}{' '}
             {result.instructor.last_name}
           </p>
-        }
-        <p className="mt-3 truncate-search">
-          {result.description[language] &&
-            parse(result.description[language])}
-        </p>
+        )}
+        <div className="my-2 truncate-search">
+          {result.description[language] && parse(result.description[language])}
+        </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 const Result = (props) => {
   if (!props.result.type) {
@@ -174,16 +175,15 @@ const Result = (props) => {
     resource: ResourceResult,
     book: BookResult,
     course: CourseResult,
-  }
+  };
 
-  const Render = lookup[props.result.type]
+  const Render = lookup[props.result.type];
 
   return <Render {...props} />;
-
-}
+};
 
 const Search = ({ location, pageContext }) => {
-  const { resources, books, thinkific: courses } = pageContext
+  const { resources, books, thinkific: courses } = pageContext;
   const [filters, setFilters] = useState({
     pdf: false,
     video: false,
@@ -191,130 +191,130 @@ const Search = ({ location, pageContext }) => {
     editable: false,
     jpg: false,
     psd: false,
-  })
+  });
   const [productTypes, setProductTypes] = useState({
     resources: false,
     books: false,
     training: false,
-  })
+  });
 
   const [categories, setCategories] = useState({
-    "bible-and-theology": false,
-    "global-missions": false,
+    'bible-and-theology': false,
+    'global-missions': false,
     sermons: false,
-    "worship-and-production": false,
-    "local-outreach": false,
+    'worship-and-production': false,
+    'local-outreach': false,
     generations: false,
     discipleship: false,
     languages: false,
-    "culture-and-worldview": false,
+    'culture-and-worldview': false,
     leadership: false,
     operations: false,
-    "missions-&-outreach": false,
-  })
+    'missions-&-outreach': false,
+  });
 
-  const [unfiltered, setUnfiltered] = useState([])
-  const [results, setResults] = useState([])
-  const { q, categories: cats, type, strict } = useQueryString(location.search)
-  const [query, setQuery] = useState(decodeURI(q !== undefined ? q : ""))
-  const t = useTranslations()
-  const { language } = useTranslateContext()
+  const [unfiltered, setUnfiltered] = useState([]);
+  const [results, setResults] = useState([]);
+  const { q, categories: cats, type, strict } = useQueryString(location.search);
+  const [query, setQuery] = useState(decodeURI(q !== undefined ? q : ''));
+  const t = useTranslations();
+  const { language } = useTranslateContext();
 
   const handleClick = function (e) {
     if (Object.keys(productTypes).includes(e.target.id)) {
       setProductTypes({
         ...productTypes,
         [e.target.id]: e.target.checked,
-      })
+      });
     } else if (Object.keys(categories).includes(e.target.id)) {
       setCategories({
         ...categories,
         [e.target.id]: e.target.checked,
-      })
+      });
     } else {
       setFilters({
         ...filters,
         [e.target.id]: e.target.checked,
-      })
+      });
     }
-  }
+  };
 
   const filterResults = () => {
-    const filterArr = []
-    const categoriesArr = []
-    let tmp
+    const filterArr = [];
+    const categoriesArr = [];
+    let tmp;
 
-    for (let f in filters) {
-      if (filters[f]) filterArr.push(f)
+    for (const f in filters) {
+      if (filters[f]) filterArr.push(f);
     }
 
     for (let c in categories) {
-      if (categories[c]) categoriesArr.push(c)
+      if (categories[c]) categoriesArr.push(c);
     }
 
     if (filterArr.length + categoriesArr.length === 0)
-      return setResults(unfiltered)
+      return setResults(unfiltered);
 
     if (filterArr.length > 0) {
-      tmp = unfiltered.filter(res => {
+      tmp = unfiltered.filter((res) => {
         const matches =
           res.item.contentTypes &&
-          res.item.contentTypes.some(type => filterArr.includes(type))
-        return matches
-      })
+          res.item.contentTypes.some((type) => filterArr.includes(type));
+        return matches;
+      });
     }
 
     if (categoriesArr.length > 0) {
       if (!tmp) tmp = unfiltered;
-      tmp = tmp.filter(res => {
+      tmp = tmp.filter((res) => {
         const categories = res.item?.categories || res.item.node?.categories;
         let isMatch = false;
 
         if (categories) {
-          isMatch = categories.some(cat =>
-            categoriesArr.includes(cat.slug)
-          )
+          isMatch = categories.some((cat) => categoriesArr.includes(cat.slug));
         } else if (res.item.node?.tags) {
-          isMatch = res.item.node.tags.some(tag =>
+          isMatch = res.item.node.tags.some((tag) =>
             categoriesArr.includes(slugify(tag))
-          )
+          );
         } else if (res.item.node?.keywords) {
-          const keywordsArr = res.item.node.keywords.length 
-            ? res.item.node.keywords.split('\n') 
+          const keywordsArr = res.item.node.keywords.length
+            ? res.item.node.keywords.split('\n')
             : [];
-          isMatch = keywordsArr.some(keyword => {
+          isMatch = keywordsArr.some((keyword) => {
             return categoriesArr.includes(slugify(keyword));
-          })
+          });
         }
 
         if (isMatch) {
-          console.log(true, res)
+          console.log(true, res);
         }
 
         return isMatch;
       });
     }
 
-    setResults(tmp)
-  }
+    setResults(tmp);
+  };
 
   const handleChange = function (e) {
-    setQuery(e.target.value)
-  }
+    setQuery(e.target.value);
+  };
 
   const handleSubmit = function (e) {
-    e.preventDefault()
-    if (query === "") return
-    navigate(translateLink(`/search/?q=${encodeURIComponent(query)}`, language))
-  }
+    e.preventDefault();
+    if (query === '') return;
+    navigate(
+      translateLink(`/search/?q=${encodeURIComponent(query)}`, language)
+    );
+  };
 
   const generateUnfiltered = () => {
-    let tmp = []
-    const threshold = strict && strict.toLowerCase() == "true" ? 0.0 : 0.0
+    let tmp = [];
+    const threshold = strict && strict.toLowerCase() == 'true' ? 0.0 : 0.0;
 
-    if (productTypes.resources) tmp.push(...resources)
-    if (productTypes.books) tmp.push(...books)
-    if (productTypes.training && courses) tmp.push(...courses.edges)
+    if (productTypes.resources) tmp.push(...resources);
+    if (productTypes.books) tmp.push(...books);
+    if (productTypes.training && courses) tmp.push(...courses.edges);
 
     const options = {
       includeScore: true,
@@ -326,91 +326,94 @@ const Search = ({ location, pageContext }) => {
       ignoreLocation: true,
       keys: [
         `title.${language}`,
-        "categories.slug",
+        'categories.slug',
         `categories.title.${language}`,
-        "tags.slug",
+        'tags.slug',
         `tags.title.${language}`,
-        "contentTypes",
+        'contentTypes',
         `description.html.${language}`,
         `node.descriptionHtml.${language}`,
         `node.title.${language}`,
-        "node.handle",
-        "name",
-        "slug",
-        "subtitle",
+        'node.handle',
+        'name',
+        'slug',
+        'subtitle',
         `node.description.${language}`,
         `node.name.${language}`,
         `node.keywords`,
         `node.instructor.full_name`,
       ],
-    }
+    };
 
-    const fuse = new Fuse(tmp, options)
+    const fuse = new Fuse(tmp, options);
 
-    if ((q === undefined || !q?.length) && cats) {
-      tmp = tmp.map(item => ({ item: item }))
-      setUnfiltered(tmp)
+    if (!!!q?.length) {
+      tmp = tmp.map((item) => ({ item: item }));
+      setUnfiltered(tmp);
     } else {
       /* Initially, we want to remove any stopwords from the query to avoid irrelevant matches */
       let withoutStopwords = removeStopwords(
-        q.split(" "),
+        (q || '').split(' '),
         stopwords[language]
-      ).join(" ")
+      ).join(' ');
 
       /* If the string is all stopwords, just use the query */
       if (!withoutStopwords.length) {
-        withoutStopwords = q
+        withoutStopwords = q;
       }
 
       /* Get the search results via Fuse.js and then return them to the user */
-      tmp = fuse.search(decodeURI(withoutStopwords))
-      setUnfiltered(tmp)
+      tmp = fuse.search(decodeURI(withoutStopwords));
+      setUnfiltered(tmp);
     }
-  }
+  };
 
-  useEffect(() => filterResults(), [filters, unfiltered, categories])
-  useEffect(() => generateUnfiltered(), [productTypes, resources, books, courses])
+  useEffect(() => filterResults(), [filters, unfiltered, categories]);
+  useEffect(
+    () => generateUnfiltered(),
+    [productTypes, resources, books, courses]
+  );
 
   useEffect(() => {
     if (type !== undefined) {
-      const tmp = decodeURIComponent(type.replace("/", "")).split(",")
-      const typesObj = { ...productTypes }
+      const tmp = decodeURIComponent(type.replace('/', '')).split(',');
+      const typesObj = { ...productTypes };
 
       for (let t of tmp) {
-        typesObj[t.toLowerCase()] = true
+        typesObj[t.toLowerCase()] = true;
       }
 
-      return setProductTypes(typesObj)
+      return setProductTypes(typesObj);
     } else {
-      return setProductTypes({ resources: true, books: true, training: true })
+      return setProductTypes({ resources: true, books: true, training: true });
     }
-  }, [q])
+  }, [q]);
 
   useEffect(() => {
     if (cats) {
-      const qCats = decodeURIComponent(cats).split("|")
-      const newCategoriesState = categories
-      qCats.forEach(cat => {
-        newCategoriesState[cat] = true
-      })
-      setCategories(newCategoriesState)
+      const qCats = decodeURIComponent(cats).split('|');
+      const newCategoriesState = categories;
+      qCats.forEach((cat) => {
+        newCategoriesState[cat] = true;
+      });
+      setCategories(newCategoriesState);
     }
-  }, [cats])
+  }, [cats]);
 
   return (
     <Layout location={location}>
       <SEO title={`${t`Search for`}: ${query}`} />
       <section
         style={{
-          backgroundPosition: "center bottom",
-          backgroundSize: "cover",
+          backgroundPosition: 'center bottom',
+          backgroundSize: 'cover',
           backgroundImage: `linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.4)), url('${heroImg}')`,
         }}
       >
         <div
           className="py-4"
           style={{
-            background: "rgba(15,56,90,0.85)",
+            background: 'rgba(15,56,90,0.85)',
           }}
         >
           <div className="container reduced-width text-white">
@@ -425,13 +428,13 @@ const Search = ({ location, pageContext }) => {
             <span className="input-group-text" id="addon-wrapping">
               <FontAwesomeIcon
                 icon={faSearch}
-                style={{ color: "#000" }}
+                style={{ color: '#000' }}
                 size="lg"
               />
             </span>
             <input
               type="text"
-              className="form-control"
+              className="form-control bg-white"
               placeholder="Ex. Streaming our Worship Service"
               aria-label="search"
               onChange={handleChange}
@@ -441,8 +444,11 @@ const Search = ({ location, pageContext }) => {
         </div>
       </section>
       <section className="my-5 container reduced-width">
-        <div className="row gx-5">
-          <div className="col-12 col-md-4 col-lg-3 mb-5">
+        <div className="row gx-5 position-relative align-items-start">
+          <div
+            className="col-12 col-md-4 col-lg-3 mb-5"
+            style={{ top: '1rem' }}
+          >
             <div className="bg-light p-3">
               <p className="font-weight-bold">{t`Include in search`}...</p>
               <div className="form-check">
@@ -578,7 +584,7 @@ const Search = ({ location, pageContext }) => {
                   type="checkbox"
                   value=""
                   id="bible-and-theology"
-                  checked={categories["bible-and-theology"]}
+                  checked={categories['bible-and-theology']}
                   onClick={handleClick}
                 />
                 <label
@@ -594,7 +600,7 @@ const Search = ({ location, pageContext }) => {
                   type="checkbox"
                   value=""
                   id="global-missions"
-                  checked={categories["global-missions"]}
+                  checked={categories['global-missions']}
                   onClick={handleClick}
                 />
                 <label className="form-check-label" htmlFor="global-missions">
@@ -607,7 +613,7 @@ const Search = ({ location, pageContext }) => {
                   type="checkbox"
                   value=""
                   id="sermons"
-                  checked={categories["sermons"]}
+                  checked={categories['sermons']}
                   onClick={handleClick}
                 />
                 <label className="form-check-label" htmlFor="sermons">
@@ -620,7 +626,7 @@ const Search = ({ location, pageContext }) => {
                   type="checkbox"
                   value=""
                   id="worship-and-production"
-                  checked={categories["worship-and-production"]}
+                  checked={categories['worship-and-production']}
                   onClick={handleClick}
                 />
                 <label
@@ -636,7 +642,7 @@ const Search = ({ location, pageContext }) => {
                   type="checkbox"
                   value=""
                   id="local-outreach"
-                  checked={categories["local-outreach"]}
+                  checked={categories['local-outreach']}
                   onClick={handleClick}
                 />
                 <label className="form-check-label" htmlFor="local-outreach">
@@ -649,7 +655,7 @@ const Search = ({ location, pageContext }) => {
                   type="checkbox"
                   value=""
                   id="generations"
-                  checked={categories["generations"]}
+                  checked={categories['generations']}
                   onClick={handleClick}
                 />
                 <label className="form-check-label" htmlFor="generations">
@@ -662,7 +668,7 @@ const Search = ({ location, pageContext }) => {
                   type="checkbox"
                   value=""
                   id="discipleship"
-                  checked={categories["discipleship"]}
+                  checked={categories['discipleship']}
                   onClick={handleClick}
                 />
                 <label className="form-check-label" htmlFor="discipleship">
@@ -688,7 +694,7 @@ const Search = ({ location, pageContext }) => {
                   type="checkbox"
                   value=""
                   id="culture-and-worldview"
-                  checked={categories["culture-and-worldview"]}
+                  checked={categories['culture-and-worldview']}
                   onClick={handleClick}
                 />
                 <label
@@ -704,7 +710,7 @@ const Search = ({ location, pageContext }) => {
                   type="checkbox"
                   value=""
                   id="leadership"
-                  checked={categories["leadership"]}
+                  checked={categories['leadership']}
                   onClick={handleClick}
                 />
                 <label className="form-check-label" htmlFor="leadership">
@@ -717,7 +723,7 @@ const Search = ({ location, pageContext }) => {
                   type="checkbox"
                   value=""
                   id="operations"
-                  checked={categories["operations"]}
+                  checked={categories['operations']}
                   onClick={handleClick}
                 />
                 <label className="form-check-label" htmlFor="operations">
@@ -731,9 +737,16 @@ const Search = ({ location, pageContext }) => {
               results.map((res, index) => {
                 const result = res.item?.node || res.item;
 
-                return result
-                  ? <Result result={result} language={language} t={t} key={'result_' + index} />
-                  : <></>
+                return result ? (
+                  <Result
+                    result={result}
+                    language={language}
+                    t={t}
+                    key={'result_' + index}
+                  />
+                ) : (
+                  <></>
+                );
               })
             ) : (
               <section className="col-12 col-md-8 col-lg-9 my-5 text-center">
@@ -744,7 +757,7 @@ const Search = ({ location, pageContext }) => {
         </div>
       </section>
     </Layout>
-  )
-}
+  );
+};
 
-export default Search
+export default Search;

@@ -4,49 +4,52 @@
  * See file LICENSE for full license details.                                                   *
  ************************************************************************************************/
 
-import React from "react"
-import { Link } from "gatsby"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons"
-import parse from "html-react-parser"
+import React from 'react';
+import { Link } from 'gatsby';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import parse from 'html-react-parser';
 // import Carousel, { Dots, slidesToShowPlugin } from "@brainhubeu/react-carousel"
-import { useTranslations, useTranslateContext } from "gatsby-plugin-translate"
-import "@brainhubeu/react-carousel/lib/style.css"
-import styled from "styled-components"
-import diversity from "../../../images/diversity.jpg"
-import worship from "../../../images/worship-and-production.jpg"
-import { translateLink } from "../../../hooks"
-import BackgroundImage from "../../../ui/atoms/BackgroundImage"
+import { useTranslations, useTranslateContext } from 'gatsby-plugin-translate';
+import '@brainhubeu/react-carousel/lib/style.css';
+import styled from 'styled-components';
+import diversity from '../../../images/diversity.jpg';
+import worship from '../../../images/worship-and-production.jpg';
+import { translateLink } from '../../../hooks';
+import BackgroundImage from '../../../ui/atoms/BackgroundImage';
 
 const gridOrder = [
-  "bible-and-theology",
-  "leadership",
-  "sermons",
-  "positionpapers",
-  "missions-&-outreach",
-  "discipleship",
-  "worship-and-production",
-  "operations",
-  "generations",
-  "church-planting",
-  "marketplace",
-  "creative",
-  "languages",
-  "local-outreach",
+  'bible-and-theology',
+  'leadership',
+  'sermons',
+  'positionpapers',
+  'missions-&-outreach',
+  'discipleship',
+  'worship-and-production',
+  'operations',
+  'generations',
+  'church-planting',
+  'marketplace',
+  'creative',
+  'languages',
+  'local-outreach',
   // 'culture-and-worldview'
-]
+];
 
 const CategoriesGrid = ({ data, linkToSearch }) => {
-  const { language } = useTranslateContext()
-  let ratio, lg, sm, linkTo
+  const { language } = useTranslateContext();
+  let ratio, lg, sm, linkTo;
 
   return data.map((edge, i) => {
-    const { slug, title, thumbnail } = edge
+    const { slug, title, thumbnail } = edge;
 
-    ratio = i < 2 ? "ratio ratio-16x7" : "ratio ratio-16x9"
-    lg = i < 2 ? 6 : i < 5 ? 4 : 3
-    sm = i < 3 ? 12 : 6
-    linkTo = linkToSearch === true ? `/search/?categories=${slug}` : `/resources/${slug}`
+    ratio = i < 2 ? 'ratio ratio-16x7' : 'ratio ratio-16x9';
+    lg = i < 2 ? 6 : i < 5 ? 4 : 3;
+    sm = i < 3 ? 12 : 6;
+    linkTo =
+      linkToSearch === true
+        ? `/search/?categories=${encodeURIComponent(slug)}`
+        : `/resources/${slug}`;
 
     return (
       <Link
@@ -55,7 +58,7 @@ const CategoriesGrid = ({ data, linkToSearch }) => {
         key={slug}
         data-category={title}
       >
-        <div className={"position-relative " + ratio}>
+        <div className={'position-relative ' + ratio}>
           <BackgroundImage
             jpgSrc={`https://media.graphassets.com/resize=fit:scale,width:300/output=format:jpg/${thumbnail.handle}`}
             webpSrc={`https://media.graphassets.com/resize=fit:scale,width:300/output=format:webp/${thumbnail.handle}`}
@@ -67,17 +70,17 @@ const CategoriesGrid = ({ data, linkToSearch }) => {
           </div>
         </div>
       </Link>
-    )
-  })
-}
+    );
+  });
+};
 
 export const Categories = ({ data, linkToSearch = false }) => {
-  const t = useTranslations()
+  const t = useTranslations();
   const categoriesData = data
-    .filter(node => gridOrder.includes(node.slug))
+    .filter((node) => gridOrder.includes(node.slug))
     .sort((a, b) => {
-      return gridOrder.indexOf(a.slug) - gridOrder.indexOf(b.slug)
-    })
+      return gridOrder.indexOf(a.slug) - gridOrder.indexOf(b.slug);
+    });
 
   return (
     <section className="container reduced-width py-5 px-5 px-md-0">
@@ -88,14 +91,14 @@ export const Categories = ({ data, linkToSearch = false }) => {
         <CategoriesGrid data={categoriesData} linkToSearch={linkToSearch} />
       </div>
     </section>
-  )
-}
+  );
+};
 
 export const BooksHero = ({ data }) => {
-  const state = data
-  const { cover, title, author, description, link } = state
-  const t = useTranslations()
-  const { language } = useTranslateContext()
+  const state = data;
+  const { cover, title, author, description, link } = state;
+  const t = useTranslations();
+  const { language } = useTranslateContext();
 
   return (
     <section>
@@ -104,9 +107,9 @@ export const BooksHero = ({ data }) => {
           <h1 className="mb-0 kapra display-4">
             <strong>{t`Books`}</strong>
           </h1>
-          <Link to={translateLink("/books", language)} className="ml-3">
-            {t`Browse All`}{" "}
-            <FontAwesomeIcon icon={faArrowRight} style={{ color: "red" }} />
+          <Link to={translateLink('/books', language)} className="ml-3">
+            {t`Browse All`}{' '}
+            <FontAwesomeIcon icon={faArrowRight} style={{ color: 'red' }} />
           </Link>
         </div>
         <div className="row gx-5">
@@ -134,13 +137,13 @@ export const BooksHero = ({ data }) => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
 // Also FeaturedTraining
 export const FeaturedResources = ({ data: state, bgClass }) => {
-  const t = useTranslations()
-  const { language } = useTranslateContext()
+  const t = useTranslations();
+  const { language } = useTranslateContext();
   const {
     courseTwoDescription,
     courseOneUrl,
@@ -150,16 +153,16 @@ export const FeaturedResources = ({ data: state, bgClass }) => {
     courseTwoThumbnail,
     courseTwoTitle,
     courseTwoUrl,
-  } = state.localizations[language]
+  } = state.localizations[language];
 
   return (
     <section className={bgClass}>
       <div className="container reduced-width py-4">
         <div className="d-flex align-items-center mt-5 mb-3">
           <p className="h1 text-center kapra display-4">{t`Featured Training`}</p>
-          <Link to={translateLink("/training", language)} className="ml-3">
-            {t`Browse All`}{" "}
-            <FontAwesomeIcon icon={faArrowRight} style={{ color: "red" }} />
+          <Link to={translateLink('/training', language)} className="ml-3">
+            {t`Browse All`}{' '}
+            <FontAwesomeIcon icon={faArrowRight} style={{ color: 'red' }} />
           </Link>
         </div>
         <div className="row gx-5 mt-5 pt-5">
@@ -208,12 +211,12 @@ export const FeaturedResources = ({ data: state, bgClass }) => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export const MoreFeaturedResources = props => {
-  const t = useTranslations()
-  const { language } = useTranslateContext()
+export const MoreFeaturedResources = (props) => {
+  const t = useTranslations();
+  const { language } = useTranslateContext();
   return (
     <section>
       <div className="container reduced-width py-4">
@@ -226,7 +229,7 @@ export const MoreFeaturedResources = props => {
             <p className="h1 kapra">{t`It's About Adding Margin`}</p>
             <p className="mt-3 h5">{t`Tools to help you take the next step forward. Free resources from job descriptions to position papers, organizational charts to facility documents.`}</p>
             <Link
-              to={translateLink("/resources", language)}
+              to={translateLink('/resources', language)}
               className="btn btn-primary btn-shadow text-white mt-3 btn-sm"
             >{t`See Resources`}</Link>
           </div>
@@ -237,7 +240,7 @@ export const MoreFeaturedResources = props => {
             <p className="h1 kapra">{t`We've Got Your Back`}</p>
             <p className="mt-3 h5">{t`Trusted resources curated from proven churches in the Mannahouse Global Family.`}</p>
             <Link
-              to={translateLink("/resources", language)}
+              to={translateLink('/resources', language)}
               className="btn btn-primary btn-shadow text-white mt-3 btn-sm"
             >{t`See Resources`}</Link>
           </div>
@@ -247,8 +250,8 @@ export const MoreFeaturedResources = props => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
 const Partner = styled.img`
   max-height: 75px;
@@ -257,7 +260,7 @@ const Partner = styled.img`
     height: auto;
     max-height: 60px;
   }
-`
+`;
 
 export const Partners = ({ data: partners, bgClass }) => {
   return (
@@ -265,11 +268,11 @@ export const Partners = ({ data: partners, bgClass }) => {
       <div className="container reduced-width py-5">
         <div
           className="py-5 px-5 px-sm-auto justify-content-between text-gray row gx-5"
-          style={{ color: "gray" }}
+          style={{ color: 'gray' }}
         >
           {partners.slice(0, 5).map((partner, i) => {
-            const sm = i < 2 ? 6 : 4
-            const mb = i < 2 ? " mb-4" : ""
+            const sm = i < 2 ? 6 : 4;
+            const mb = i < 2 ? ' mb-4' : '';
             return (
               <a
                 href={partner.externalLink}
@@ -277,15 +280,19 @@ export const Partners = ({ data: partners, bgClass }) => {
                 target="_blank"
                 key={partner.partnerName}
               >
-                <Partner src={partner.partnerLogo.url} alt={partner.partnerName} loading="lazy" />
+                <Partner
+                  src={partner.partnerLogo.url}
+                  alt={partner.partnerName}
+                  loading="lazy"
+                />
               </a>
-            )
+            );
           })}
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
 // const Testimonial = styled.div`
 //   border-radius: 5px;
