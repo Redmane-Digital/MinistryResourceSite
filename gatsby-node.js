@@ -1070,6 +1070,36 @@ exports.createPages = async ({ graphql, actions }) => {
               }
               type
             }
+            ... on Hygraph_SectionResourcesHighlights {
+              type
+              highlightTwoTitle
+              highlightTwoSubtitle
+              localizations {
+                highlightTwoTitle
+                highlightTwoSubtitle
+                highlightTwoDescription
+                highlightOneTitle
+                highlightOneSubtitle
+                highlightOneDescription
+                locale
+              }
+              highlightTwoDescription
+              highlightOneTitle
+              highlightOneDescription
+              highlightOneSubtitle
+              highlightOneImage {
+                url
+                height
+                width
+                handle
+              }
+              highlightTwoImage {
+                url
+                width
+                handle
+                height
+              }
+            }
             ... on Hygraph_PartnersSection {
               type
             }

@@ -214,7 +214,7 @@ export const FeaturedResources = ({ data: state, bgClass }) => {
   );
 };
 
-export const MoreFeaturedResources = (props) => {
+export const ResourcesHighlights = (props) => {
   const t = useTranslations();
   const { language } = useTranslateContext();
   return (

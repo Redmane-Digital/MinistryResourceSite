@@ -12,7 +12,7 @@ import {
   BooksHero,
   FeaturedResources,
   Partners,
-  MoreFeaturedResources,
+  ResourcesHighlights,
 } from '../components/pages/resources';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
@@ -24,7 +24,7 @@ function RenderContentAreas({ data }) {
     Partners,
     FeaturedBook: BooksHero,
     FeaturedTraining: FeaturedResources,
-    MoreFeaturedResources: MoreFeaturedResources,
+    ResourcesHighlights,
   };
 
   let index = -1;
