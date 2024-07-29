@@ -16,7 +16,7 @@ import { useSelector } from 'react-redux';
 import useYourPbc from '../../images/useyourPBC.jpg';
 import { useTranslations, useTranslateContext } from 'gatsby-plugin-translate';
 import { translateLink } from '../../hooks';
-import BackgroundImage from '../../ui/atoms/BackgroundImage';
+import BackgroundImage from '../../components/atoms/BackgroundImage';
 import * as styles from './styles.module.scss';
 import config from './config';
 

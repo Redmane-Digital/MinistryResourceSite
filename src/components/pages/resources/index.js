@@ -16,7 +16,7 @@ import styled from 'styled-components';
 import diversity from '../../../images/diversity.jpg';
 import worship from '../../../images/worship-and-production.jpg';
 import { translateLink } from '../../../hooks';
-import BackgroundImage from '../../../ui/atoms/BackgroundImage';
+import BackgroundImage from '../../atoms/BackgroundImage';
 
 const gridOrder = [
   'bible-and-theology',

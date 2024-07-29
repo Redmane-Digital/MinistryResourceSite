@@ -4,25 +4,25 @@
  * See file LICENSE for full license details.                                                   *
  ************************************************************************************************/
 
-import React from "react"
-import styled from "styled-components"
-import Layout from "../components/layout"
-import SEO from "../components/seo"
-import LiveSearchBox from "../components/universal/search/LiveSearchBox"
-import background from "../images/training.jpg"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons"
-import { Link } from "gatsby"
-import { useTranslations, useTranslateContext } from "gatsby-plugin-translate"
-import Hero from "../components/heroes/WithSearch"
+import React from 'react';
+import styled from 'styled-components';
+import Layout from '../components/layout';
+import SEO from '../components/seo';
+import LiveSearchBox from '../components/universal/search/LiveSearchBox';
+import background from '../images/training.jpg';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'gatsby';
+import { useTranslations, useTranslateContext } from 'gatsby-plugin-translate';
+import Hero from '../components/heroes/WithSearch';
 
 // pics
-import dos from "../images/trainDos.jpg"
-import pill from "../images/pbc_pill.png"
-import courseIcon from "../images/course_icon.svg"
-import workshopIcon from "../images/workshop_icon.svg"
-import BackgroundImage from "../ui/atoms/BackgroundImage"
-import trainingToSharpen from "../images/training_to_sharpen.jpg";
+import dos from '../images/trainDos.jpg';
+import pill from '../images/pbc_pill.png';
+import courseIcon from '../images/course_icon.svg';
+import workshopIcon from '../images/workshop_icon.svg';
+import BackgroundImage from '../components/atoms/BackgroundImage';
+import trainingToSharpen from '../images/training_to_sharpen.jpg';
 
 const Button = styled.a`
   font-size: 14px;
@@ -46,7 +46,7 @@ const Button = styled.a`
     color: #121c30;
     &:after {
       position: absolute;
-      content: "";
+      content: '';
       height: calc(100% + 1px);
       width: calc(100% + 1px);
       top: -1px;
@@ -80,7 +80,7 @@ const Button = styled.a`
     }
     &:after {
       position: absolute;
-      content: "";
+      content: '';
       height: calc(100% + 1px);
       width: calc(100% + 1px);
       top: -1px;
@@ -94,7 +94,7 @@ const Button = styled.a`
       border-color: #e64226;
     }
   }
-`
+`;
 
 const PbcInfo = styled.div`
   @media only screen and (max-width: 767px) {
@@ -134,24 +134,30 @@ const PbcInfo = styled.div`
       }
     }
   }
-`
+`;
 
 const CourseImage = styled.img`
   aspect-ratio: 209 / 118;
   object-fit: cover;
   width: 100%;
-`
+`;
 
 const Train = ({ location }) => {
-  const t = useTranslations()
-  const { language } = useTranslateContext()
+  const t = useTranslations();
+  const { language } = useTranslateContext();
   return (
     <Layout location={location}>
       <SEO
         title={t`Training`}
         description={t`Elevate your ministry with our specially curated selection of training resources. Dive into expert-led sessions designed to empower pastors, worship leaders, and church staff.`}
       />
-      <Hero title={t`Training`} imgSources={{ jpg: background }} fullWidth={false} location={location} imgStyles={{ darkenBy: "0.6", position: "center bottom" }} />
+      <Hero
+        title={t`Training`}
+        imgSources={{ jpg: background }}
+        fullWidth={false}
+        location={location}
+        imgStyles={{ darkenBy: '0.6', position: 'center bottom' }}
+      />
       {/* <section className="bg-secondary-85">
         <div className="container reduced-width py-4">
           <h4 className="text-white mb-0">
@@ -280,7 +286,7 @@ const Train = ({ location }) => {
           </div>
           <p className="text-center small mb-0">
             <Link
-              to={"https://www.pbcaccess.com/courses"}
+              to={'https://www.pbcaccess.com/courses'}
               className="text-uppercase text-primary"
               target="_blank"
             >
@@ -288,7 +294,7 @@ const Train = ({ location }) => {
               <FontAwesomeIcon
                 icon={faArrowRight}
                 className="ml-2"
-                style={{ color: "#ef4123" }}
+                style={{ color: '#ef4123' }}
               />
             </Link>
           </p>
@@ -361,7 +367,7 @@ const Train = ({ location }) => {
           </div>
           <p className="text-center small mb-0">
             <Link
-              to={"https://www.pbcaccess.com/collections/bundles"}
+              to={'https://www.pbcaccess.com/collections/bundles'}
               className="text-uppercase text-secondary"
               target="_blank"
             >
@@ -369,7 +375,7 @@ const Train = ({ location }) => {
               <FontAwesomeIcon
                 icon={faArrowRight}
                 className="ml-2"
-                style={{ color: "#111c30" }}
+                style={{ color: '#111c30' }}
               />
             </Link>
           </p>
@@ -388,9 +394,9 @@ const Train = ({ location }) => {
                   style={{
                     top: 0,
                     left: 0,
-                    width: "100%",
-                    height: "100%",
-                    background: "rgba(0,0,0,0.4)",
+                    width: '100%',
+                    height: '100%',
+                    background: 'rgba(0,0,0,0.4)',
                   }}
                 ></div>
               </div>
@@ -402,7 +408,7 @@ const Train = ({ location }) => {
               </p>
               <div
                 className="d-flex flex-wrap justify-content-between mb-4"
-                style={{ maxWidth: 400, width: "100%" }}
+                style={{ maxWidth: 400, width: '100%' }}
               >
                 <a
                   href="https://www.pbcaccess.com/courses/prime"
@@ -472,7 +478,7 @@ const Train = ({ location }) => {
         </div>
       </section>
     </Layout>
-  )
-}
+  );
+};
 
-export default Train
+export default Train;

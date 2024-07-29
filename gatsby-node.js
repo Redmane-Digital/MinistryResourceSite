@@ -114,34 +114,49 @@ const assignWhitelabelSettings = (config) => {
   }
 
   // Update the copyright information in the site footer
-  let copyrightJs = fs.readFileSync(`./src/ui/organisms/footer/index.js`, {
-    encoding: 'utf8',
-  });
+  let copyrightJs = fs.readFileSync(
+    `./src/components/organisms/footer/index.js`,
+    {
+      encoding: 'utf8',
+    }
+  );
   if (copyrightJs) {
     copyrightJs = copyrightJs.replace(
       /(?!(<small>Copyright\s©{year}\s))[\w][a-z0-9\.\s\']*(?=,\sAll Rights Reserved.<\/small>)/gim,
       copyrightInformation.copyrightOwner
     );
 
-    fs.writeFileSync(`./src/ui/organisms/footer/index.js`, copyrightJs);
+    fs.writeFileSync(`./src/components/organisms/footer/index.js`, copyrightJs);
   }
 
   // Update the logo in the site navbar
-  let navbarJs = fs.readFileSync(`./src/ui/organisms/navigation/index.js`, {
-    encoding: 'utf8',
-  });
+  let navbarJs = fs.readFileSync(
+    `./src/components/organisms/navigation/index.js`,
+    {
+      encoding: 'utf8',
+    }
+  );
   if (navbarJs) {
     navbarJs = navbarJs.replace(/(?<=<img\s+src=")([^"]+)(?=")/gim, logo.url);
 
-    fs.writeFileSync(`./src/ui/organisms/navigation/index.js`, navbarJs);
+    fs.writeFileSync(
+      `./src/components/organisms/navigation/index.js`,
+      navbarJs
+    );
   }
-  let footerConfig = fs.readFileSync(`./src/ui/organisms/footer/config.js`, {
-    encoding: 'utf8',
-  });
+  let footerConfig = fs.readFileSync(
+    `./src/components/organisms/footer/config.js`,
+    {
+      encoding: 'utf8',
+    }
+  );
   if (navbarJs) {
     navbarJs = navbarJs.replace(/(?<=<img\s+src=")([^"]+)(?=")/gim, logo.url);
 
-    fs.writeFileSync(`./src/ui/organisms/navigation/index.js`, navbarJs);
+    fs.writeFileSync(
+      `./src/components/organisms/navigation/index.js`,
+      navbarJs
+    );
   }
 
   // Set allowLoginWithPbcAccess on login and signup pages
