@@ -1,0 +1,13 @@
+.separator {
+  width: calc(100% - 2rem);
+  margin: 0.5rem 0rem 0.5rem 1rem;
+}
+
+.authDropdown {
+  right: 0;
+  left: auto;
+  border: none;
+  border-radius: 0;
+  box-shadow: 0 0 20px #00000040;
+  margin: 1rem 0 0;
+}

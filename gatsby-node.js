@@ -15,6 +15,12 @@ const fs = require('fs');
 const crypto = require('crypto');
 const client = require('https');
 
+const resourceSite = {
+  enum: 'tfh_resource',
+  slug: 'tfh-resourcse',
+  title: 'TFH Resources',
+};
+
 // secret or salt to be hashed with
 const secret = 'mhresource';
 const fetch = require('node-fetch');
@@ -80,6 +86,12 @@ const assignWhitelabelSettings = (config) => {
       `$tertiary: ${colors.tertiary?.hex || colors.secondary.hex} !default`
     );
 
+    regex = new RegExp(`\\$quaternary:[^;]*`, 'gmi');
+    variables = variables.replace(
+      regex,
+      `$quaternary: ${colors.quaternary?.hex || colors.secondary.hex} !default`
+    );
+
     regex = new RegExp(`\\$buttons:[^;]*`, 'gmi');
     variables = variables.replace(
       regex,
@@ -115,13 +127,13 @@ const assignWhitelabelSettings = (config) => {
   }
 
   // Update the logo in the site navbar
-  let navbarJs = fs.readFileSync(`./src/components/navigation/Primary.js`, {
+  let navbarJs = fs.readFileSync(`./src/ui/organisms/navigation/index.js`, {
     encoding: 'utf8',
   });
   if (navbarJs) {
     navbarJs = navbarJs.replace(/(?<=<img\s+src=")([^"]+)(?=")/gim, logo.url);
 
-    fs.writeFileSync(`./src/components/navigation/Primary.js`, navbarJs);
+    fs.writeFileSync(`./src/ui/organisms/navigation/index.js`, navbarJs);
   }
 
   // Set allowLoginWithPbcAccess on login and signup pages
@@ -862,7 +874,7 @@ exports.createPages = async ({ graphql, actions }) => {
   memo.raw.cms = await graphql(`
     query allResources {
       Hygraph {
-        siteConfig(where: { title: "Mannahouse Resource" }) {
+        siteConfig(where: { title: "${resourceSite.title}" }) {
           aboutSite {
             html
           }
@@ -988,7 +1000,7 @@ exports.createPages = async ({ graphql, actions }) => {
           where: {
             resourceSites_contains_some: [
               mannahouse_resource
-              mannahouse_resource
+              ${resourceSite.enum}
             ]
           }
           first: 1000
@@ -1032,7 +1044,7 @@ exports.createPages = async ({ graphql, actions }) => {
           }
         }
         allHygraphCourseBundles: courseBundles(
-          where: { resourceSites: mannahouse_resource }
+          where: { resourceSites: ${resourceSite.enum} }
         ) {
           slug
           subtitle
@@ -1052,7 +1064,7 @@ exports.createPages = async ({ graphql, actions }) => {
           }
           type
         }
-        homepage(where: { resourceSite: mannahouse_resource }) {
+        homepage(where: { resourceSite: ${resourceSite.enum} }) {
           contentAreas {
             ... on Hygraph_SectionFeaturedBook {
               localizations(locales: [en, es], includeCurrent: true) {

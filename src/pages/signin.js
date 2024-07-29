@@ -27,7 +27,7 @@ const SignIn = ({ location }) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
   const { ref, return_to } = useQueryString(location.search);
-  const canUsePbcSSO = true;
+  const canUsePbcSSO = false;
 
   const login = function (e) {
     e.preventDefault();
