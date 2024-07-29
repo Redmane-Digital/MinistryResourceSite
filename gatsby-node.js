@@ -114,7 +114,7 @@ const assignWhitelabelSettings = (config) => {
   }
 
   // Update the copyright information in the site footer
-  let copyrightJs = fs.readFileSync(`./src/components/universal/Footer.js`, {
+  let copyrightJs = fs.readFileSync(`./src/ui/organisms/footer/index.js`, {
     encoding: 'utf8',
   });
   if (copyrightJs) {
@@ -123,11 +123,19 @@ const assignWhitelabelSettings = (config) => {
       copyrightInformation.copyrightOwner
     );
 
-    fs.writeFileSync(`./src/components/universal/Footer.js`, copyrightJs);
+    fs.writeFileSync(`./src/ui/organisms/footer/index.js`, copyrightJs);
   }
 
   // Update the logo in the site navbar
   let navbarJs = fs.readFileSync(`./src/ui/organisms/navigation/index.js`, {
+    encoding: 'utf8',
+  });
+  if (navbarJs) {
+    navbarJs = navbarJs.replace(/(?<=<img\s+src=")([^"]+)(?=")/gim, logo.url);
+
+    fs.writeFileSync(`./src/ui/organisms/navigation/index.js`, navbarJs);
+  }
+  let footerConfig = fs.readFileSync(`./src/ui/organisms/footer/config.js`, {
     encoding: 'utf8',
   });
   if (navbarJs) {
@@ -149,7 +157,7 @@ const assignWhitelabelSettings = (config) => {
 
     fs.writeFileSync(`./src/pages/signin.js`, loginJs);
   }
-  let signupJs = fs.readFileSync(`./src/pages/signup.js`, {
+  let signupJs = fs.readFileSync(`./src/pages/signup/index.js`, {
     encoding: 'utf8',
   });
   if (signupJs) {
@@ -530,9 +538,19 @@ async function sourceShopify(createNode) {
 async function createPagesFromCMSData(createPage) {
   const data = memo.raw.cms;
   const categories = [];
+  const categoryImageOverides = {};
   const resources = [];
 
   // Create CATEGORY pages
+  await data.siteConfig.overrides
+    .filter((override) => override.type === 'Category Image')
+    .forEach((override) => {
+      categoryImageOverides[override.category.id] = {
+        url: override.image.url,
+        handle: override.image.handle,
+      };
+    });
+
   await data.allHygraphCategory.forEach(async (node) => {
     const category = { ...node, featured: [] };
 
@@ -564,6 +582,14 @@ async function createPagesFromCMSData(createPage) {
         category.featured.push(resource);
       }
     });
+
+    /* If an override for a category image was added in Hygraph, we'll update the category image here */
+    if (categoryImageOverides[category.id]) {
+      category.thumbnail = {
+        handle: categoryImageOverides[category.id].handle,
+        url: categoryImageOverides[category.id].url,
+      };
+    }
 
     categories.push(category);
 
@@ -649,6 +675,11 @@ async function createPagesFromCMSData(createPage) {
       },
     });
   });
+  data.books.forEach((book) => {
+    const bookNode = conformHygraphToShopifySchema(book);
+    booksArray.push(bookNode);
+    memo.books[bookNode.handle] = bookNode;
+  });
 
   // Create BOOKS page
   createPage({
@@ -715,7 +746,7 @@ async function createPagesFromCMSData(createPage) {
 
   createPage({
     path: `/search`,
-    component: path.resolve(`src/templates/search.js`),
+    component: path.resolve(`src/templates/search/index.js`),
     context: {
       books: booksArray,
       resources,
@@ -874,6 +905,23 @@ exports.createPages = async ({ graphql, actions }) => {
   memo.raw.cms = await graphql(`
     query allResources {
       Hygraph {
+        books(where: {resourceSites: tfh_resource}) {
+          author
+          title
+          tags {
+            title
+            slug
+          }
+          price
+          category
+          link
+          image {
+            url
+            width
+            handle
+            height
+          }
+        }
         siteConfig(where: { title: "${resourceSite.title}" }) {
           aboutSite {
             html
@@ -902,22 +950,15 @@ exports.createPages = async ({ graphql, actions }) => {
           }
           overrides {
             ... on Hygraph_OverrideCategoryImage {
+              type
               category {
                 title
                 slug
                 id
-                localizations {
-                  locale
-                  title
-                  description
-                }
-                description
-                heroImage {
-                  url
-                  width
-                  height
-                  handle
-                }
+              }
+              image {
+                url
+                handle
               }
             }
           }
@@ -966,6 +1007,7 @@ exports.createPages = async ({ graphql, actions }) => {
           whitelabelUrl
         }
         allHygraphCategory: categories {
+          id
           title
           localizations {
             title

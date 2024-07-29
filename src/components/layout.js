@@ -9,7 +9,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './styles/scss/bootstrap.scss';
 import Primary from '../ui/organisms/navigation';
-import Footer from './universal/Footer';
+import Footer from '../ui/organisms/footer';
 import { useSelector } from 'react-redux';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';

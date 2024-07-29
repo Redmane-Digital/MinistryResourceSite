@@ -267,7 +267,7 @@ export const Partners = ({ data: partners, bgClass }) => {
     <section className={bgClass}>
       <div className="container reduced-width py-5">
         <div
-          className="py-5 px-5 px-sm-auto justify-content-between text-gray row gx-5"
+          className="py-5 px-0 px-sm-auto justify-content-around text-gray row gx-5"
           style={{ color: 'gray' }}
         >
           {partners.slice(0, 5).map((partner, i) => {
@@ -276,7 +276,8 @@ export const Partners = ({ data: partners, bgClass }) => {
             return (
               <a
                 href={partner.externalLink}
-                className={`col-${sm} col-lg-2 my-2 d-flex justify-content-center${mb}`}
+                className={`my-2${mb}`}
+                style={{ width: 'auto', flexGrow: '1', display: 'contents' }}
                 target="_blank"
                 key={partner.partnerName}
               >

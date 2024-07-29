@@ -6,19 +6,20 @@
 
 import React, { useEffect, useState } from 'react';
 import { removeStopwords } from 'stopword';
-import heroImg from '../images/training.jpg';
+import heroImg from '../../images/training.jpg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { useQueryString, translateLink } from '../hooks';
-import Layout from '../components/layout';
-import SEO from '../components/seo';
-import placeholder from '../images/placeholder.jpeg';
-import coursePlaceholder from '../images/course-placeholder.jpg';
+import { useQueryString, translateLink } from '../../hooks';
+import Layout from '../../components/layout';
+import SEO from '../../components/seo';
+import placeholder from '../../images/placeholder.jpeg';
+import coursePlaceholder from '../../images/course-placeholder.jpg';
 import { Link, navigate } from 'gatsby';
 import parse from 'html-react-parser';
-import ContentTypeIcon from '../components/universal/ui/ContentTypeIcon';
+import ContentTypeIcon from '../../components/universal/ui/ContentTypeIcon';
 import Fuse from 'fuse.js';
 import { useTranslateContext, useTranslations } from 'gatsby-plugin-translate';
+import config from './config';
 
 const stopwords = {
   en: ['a', 'the', 'in', 'of', 'is', 'do', 'did', 'by'],
@@ -410,13 +411,10 @@ const Search = ({ location, pageContext }) => {
           backgroundImage: `linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.4)), url('${heroImg}')`,
         }}
       >
-        <div
-          className="py-4"
-          style={{
-            background: 'rgba(15,56,90,0.85)',
-          }}
-        >
-          <div className="container reduced-width text-white">
+        <div className={`py-4 bg-${config.colors.titleBg}`}>
+          <div
+            className={`container reduced-width text-${config.colors.title}`}
+          >
             <h2 className="mb-0 font-weight-bold">{t`Search`}</h2>
           </div>
         </div>
