@@ -1,6 +1,9 @@
 const config = {
   copyrightOwner: 'Resource Site',
   isWhitelabel: true,
+  colors: {
+    navLink: 'white',
+  },
   links: [
     {
       href: '/',
@@ -22,14 +25,10 @@ const config = {
       href: '/about',
       text: 'About Us',
     },
-    {
-      href: '/contact',
-      text: 'Contact',
-    },
   ],
   logo: {
     alt: 'Resource Site Logo',
-    src: 'https://via.placeholder.com/150',
+    src: 'https://media.graphassets.com/VZHaQYCvRKCEOX0wt7Iw',
   },
   emailAddress: 'info@tfh.org',
 };

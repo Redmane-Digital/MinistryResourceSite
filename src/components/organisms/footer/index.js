@@ -38,7 +38,7 @@ const Footer = () => {
       <li className="nav-item">
         <Link
           to={translateLink(link.href, language)}
-          className="nav-link"
+          className={`nav-link text-${config.colors.navLink}`}
           activeClassName="active"
           exact
           key={link.href}

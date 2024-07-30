@@ -16,7 +16,7 @@ import placeholder from '../../images/placeholder.jpeg';
 import coursePlaceholder from '../../images/course-placeholder.jpg';
 import { Link, navigate } from 'gatsby';
 import parse from 'html-react-parser';
-import ContentTypeIcon from '../../components/universal/ui/ContentTypeIcon';
+import ContentTypeIcon from '../../components/atoms/ContentTypeIcon';
 import Fuse from 'fuse.js';
 import { useTranslateContext, useTranslations } from 'gatsby-plugin-translate';
 import config from './config';

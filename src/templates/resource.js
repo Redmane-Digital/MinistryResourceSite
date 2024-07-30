@@ -13,7 +13,7 @@ import styled from 'styled-components';
 import { saveCustomerResource } from '../hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload, faCaretLeft } from '@fortawesome/free-solid-svg-icons';
-import ContentTypeIcon from '../components/universal/ui/ContentTypeIcon';
+import ContentTypeIcon from '../components/atoms/ContentTypeIcon';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
 import { useTranslateContext, useTranslations } from 'gatsby-plugin-translate';

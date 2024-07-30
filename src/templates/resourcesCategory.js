@@ -11,7 +11,7 @@ import parse from 'html-react-parser';
 import Layout from '../components/layout';
 import SEO from '../components/seo';
 import { useTranslateContext, useTranslations } from 'gatsby-plugin-translate';
-import ContentTypeIcon from '../components/universal/ui/ContentTypeIcon';
+import ContentTypeIcon from '../components/atoms/ContentTypeIcon';
 import { Link } from 'gatsby';
 import { translateLink } from '../hooks/';
 

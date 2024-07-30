@@ -254,7 +254,7 @@ export const ResourcesHighlights = (props) => {
 };
 
 const Partner = styled.img`
-  max-height: 75px;
+  max-height: 58px;
   max-width: 100%;
   @media only screen and (max-width: 576px) {
     height: auto;
@@ -268,15 +268,13 @@ export const Partners = ({ data: partners, bgClass }) => {
       <div className="container reduced-width py-5">
         <div
           className="py-5 px-0 px-sm-auto justify-content-around text-gray row gx-5"
-          style={{ color: 'gray' }}
+          style={{ color: 'gray', gap: 50 }}
         >
           {partners.slice(0, 5).map((partner, i) => {
-            const sm = i < 2 ? 6 : 4;
-            const mb = i < 2 ? ' mb-4' : '';
             return (
               <a
                 href={partner.externalLink}
-                className={`my-2${mb}`}
+                className={`my-2$`}
                 style={{ width: 'auto', flexGrow: '1', display: 'contents' }}
                 target="_blank"
                 key={partner.partnerName}

@@ -8,6 +8,8 @@ import SEO from '../components/seo';
 import { useTranslations } from 'gatsby-plugin-translate';
 
 const Books = ({ location, pageContext }) => {
+  console.log(booksImg);
+
   const t = useTranslations();
   const data = pageContext.books;
   const [products, updateProducts] = useState({
@@ -75,7 +77,9 @@ const Books = ({ location, pageContext }) => {
       <SEO title={t`Books`} />
       <Hero
         title={t`Books`}
-        background={booksImg}
+        imgSources={{
+          jpg: booksImg,
+        }}
         fullWidth={false}
         location={location}
       />
