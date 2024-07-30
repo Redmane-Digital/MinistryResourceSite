@@ -61,10 +61,9 @@ const assignWhitelabelSettings = (config) => {
   const { whitelabelColors: colors, copyrightInformation, logo } = config;
 
   // Update the brand colors in the SCSS variables
-  let variables = fs.readFileSync(
-    `./src/components/styles/scss/_variables.scss`,
-    { encoding: 'utf8' }
-  );
+  let variables = fs.readFileSync(`./src/styles/scss/_variables.scss`, {
+    encoding: 'utf8',
+  });
   if (variables) {
     let regex;
 
@@ -110,7 +109,7 @@ const assignWhitelabelSettings = (config) => {
       `$footer: ${colors.footer?.hex || colors.secondary.hex} !default`
     );
 
-    fs.writeFileSync(`./src/components/styles/scss/_variables.scss`, variables);
+    fs.writeFileSync(`./src/styles/scss/_variables.scss`, variables);
   }
 
   // Update the copyright information in the site footer
