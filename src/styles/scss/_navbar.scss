@@ -269,7 +269,7 @@
     .show > .nav-link,
     .nav-link.active {
       color: $navbar-dark-active-color;
-      border-bottom: 3px solid $mannahouse-yellow;
+      border-bottom: 3px solid currentColor;
     }
   }
 

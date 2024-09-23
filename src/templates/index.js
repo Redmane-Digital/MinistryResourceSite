@@ -50,8 +50,6 @@ function Home({ location, pageContext }) {
   const t = useTranslations();
   const { categories, contentAreas, config } = pageContext;
 
-  console.log(pageContext);
-
   return (
     <Layout location={location}>
       <SEO

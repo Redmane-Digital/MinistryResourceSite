@@ -15,6 +15,12 @@ const fs = require('fs');
 const crypto = require('crypto');
 const client = require('https');
 
+const resourceSite = {
+  enum: 'tfh_resource',
+  slug: 'tfh-resourcse',
+  title: 'TFH Resources',
+};
+
 // secret or salt to be hashed with
 const secret = 'mhresource';
 const fetch = require('node-fetch');
@@ -55,10 +61,9 @@ const assignWhitelabelSettings = (config) => {
   const { whitelabelColors: colors, copyrightInformation, logo } = config;
 
   // Update the brand colors in the SCSS variables
-  let variables = fs.readFileSync(
-    `./src/components/styles/scss/_variables.scss`,
-    { encoding: 'utf8' }
-  );
+  let variables = fs.readFileSync(`./src/styles/scss/_variables.scss`, {
+    encoding: 'utf8',
+  });
   if (variables) {
     let regex;
 
@@ -80,6 +85,12 @@ const assignWhitelabelSettings = (config) => {
       `$tertiary: ${colors.tertiary?.hex || colors.secondary.hex} !default`
     );
 
+    regex = new RegExp(`\\$quaternary:[^;]*`, 'gmi');
+    variables = variables.replace(
+      regex,
+      `$quaternary: ${colors.quaternary?.hex || colors.secondary.hex} !default`
+    );
+
     regex = new RegExp(`\\$buttons:[^;]*`, 'gmi');
     variables = variables.replace(
       regex,
@@ -98,30 +109,53 @@ const assignWhitelabelSettings = (config) => {
       `$footer: ${colors.footer?.hex || colors.secondary.hex} !default`
     );
 
-    fs.writeFileSync(`./src/components/styles/scss/_variables.scss`, variables);
+    fs.writeFileSync(`./src/styles/scss/_variables.scss`, variables);
   }
 
   // Update the copyright information in the site footer
-  let copyrightJs = fs.readFileSync(`./src/components/universal/Footer.js`, {
-    encoding: 'utf8',
-  });
+  let copyrightJs = fs.readFileSync(
+    `./src/components/organisms/footer/index.js`,
+    {
+      encoding: 'utf8',
+    }
+  );
   if (copyrightJs) {
     copyrightJs = copyrightJs.replace(
       /(?!(<small>Copyright\s©{year}\s))[\w][a-z0-9\.\s\']*(?=,\sAll Rights Reserved.<\/small>)/gim,
       copyrightInformation.copyrightOwner
     );
 
-    fs.writeFileSync(`./src/components/universal/Footer.js`, copyrightJs);
+    fs.writeFileSync(`./src/components/organisms/footer/index.js`, copyrightJs);
   }
 
   // Update the logo in the site navbar
-  let navbarJs = fs.readFileSync(`./src/components/navigation/Primary.js`, {
-    encoding: 'utf8',
-  });
+  let navbarJs = fs.readFileSync(
+    `./src/components/organisms/navigation/index.js`,
+    {
+      encoding: 'utf8',
+    }
+  );
   if (navbarJs) {
     navbarJs = navbarJs.replace(/(?<=<img\s+src=")([^"]+)(?=")/gim, logo.url);
 
-    fs.writeFileSync(`./src/components/navigation/Primary.js`, navbarJs);
+    fs.writeFileSync(
+      `./src/components/organisms/navigation/index.js`,
+      navbarJs
+    );
+  }
+  let footerConfig = fs.readFileSync(
+    `./src/components/organisms/footer/config.js`,
+    {
+      encoding: 'utf8',
+    }
+  );
+  if (navbarJs) {
+    navbarJs = navbarJs.replace(/(?<=<img\s+src=")([^"]+)(?=")/gim, logo.url);
+
+    fs.writeFileSync(
+      `./src/components/organisms/navigation/index.js`,
+      navbarJs
+    );
   }
 
   // Set allowLoginWithPbcAccess on login and signup pages
@@ -137,7 +171,7 @@ const assignWhitelabelSettings = (config) => {
 
     fs.writeFileSync(`./src/pages/signin.js`, loginJs);
   }
-  let signupJs = fs.readFileSync(`./src/pages/signup.js`, {
+  let signupJs = fs.readFileSync(`./src/pages/signup/index.js`, {
     encoding: 'utf8',
   });
   if (signupJs) {
@@ -518,9 +552,19 @@ async function sourceShopify(createNode) {
 async function createPagesFromCMSData(createPage) {
   const data = memo.raw.cms;
   const categories = [];
+  const categoryImageOverides = {};
   const resources = [];
 
   // Create CATEGORY pages
+  await data.siteConfig.overrides
+    .filter((override) => override.type === 'Category Image')
+    .forEach((override) => {
+      categoryImageOverides[override.category.id] = {
+        url: override.image.url,
+        handle: override.image.handle,
+      };
+    });
+
   await data.allHygraphCategory.forEach(async (node) => {
     const category = { ...node, featured: [] };
 
@@ -552,6 +596,14 @@ async function createPagesFromCMSData(createPage) {
         category.featured.push(resource);
       }
     });
+
+    /* If an override for a category image was added in Hygraph, we'll update the category image here */
+    if (categoryImageOverides[category.id]) {
+      category.thumbnail = {
+        handle: categoryImageOverides[category.id].handle,
+        url: categoryImageOverides[category.id].url,
+      };
+    }
 
     categories.push(category);
 
@@ -637,6 +689,11 @@ async function createPagesFromCMSData(createPage) {
       },
     });
   });
+  data.books.forEach((book) => {
+    const bookNode = conformHygraphToShopifySchema(book);
+    booksArray.push(bookNode);
+    memo.books[bookNode.handle] = bookNode;
+  });
 
   // Create BOOKS page
   createPage({
@@ -703,7 +760,7 @@ async function createPagesFromCMSData(createPage) {
 
   createPage({
     path: `/search`,
-    component: path.resolve(`src/templates/search.js`),
+    component: path.resolve(`src/templates/search/index.js`),
     context: {
       books: booksArray,
       resources,
@@ -862,7 +919,24 @@ exports.createPages = async ({ graphql, actions }) => {
   memo.raw.cms = await graphql(`
     query allResources {
       Hygraph {
-        siteConfig(where: { title: "Mannahouse Resource" }) {
+        books(where: {resourceSites: tfh_resource}) {
+          author
+          title
+          tags {
+            title
+            slug
+          }
+          price
+          category
+          link
+          image {
+            url
+            width
+            handle
+            height
+          }
+        }
+        siteConfig(where: { title: "${resourceSite.title}" }) {
           aboutSite {
             html
           }
@@ -890,22 +964,15 @@ exports.createPages = async ({ graphql, actions }) => {
           }
           overrides {
             ... on Hygraph_OverrideCategoryImage {
+              type
               category {
                 title
                 slug
                 id
-                localizations {
-                  locale
-                  title
-                  description
-                }
-                description
-                heroImage {
-                  url
-                  width
-                  height
-                  handle
-                }
+              }
+              image {
+                url
+                handle
               }
             }
           }
@@ -954,6 +1021,7 @@ exports.createPages = async ({ graphql, actions }) => {
           whitelabelUrl
         }
         allHygraphCategory: categories {
+          id
           title
           localizations {
             title
@@ -988,7 +1056,7 @@ exports.createPages = async ({ graphql, actions }) => {
           where: {
             resourceSites_contains_some: [
               mannahouse_resource
-              mannahouse_resource
+              ${resourceSite.enum}
             ]
           }
           first: 1000
@@ -1032,7 +1100,7 @@ exports.createPages = async ({ graphql, actions }) => {
           }
         }
         allHygraphCourseBundles: courseBundles(
-          where: { resourceSites: mannahouse_resource }
+          where: { resourceSites: ${resourceSite.enum} }
         ) {
           slug
           subtitle
@@ -1052,7 +1120,7 @@ exports.createPages = async ({ graphql, actions }) => {
           }
           type
         }
-        homepage(where: { resourceSite: mannahouse_resource }) {
+        homepage(where: { resourceSite: ${resourceSite.enum} }) {
           contentAreas {
             ... on Hygraph_SectionFeaturedBook {
               localizations(locales: [en, es], includeCurrent: true) {

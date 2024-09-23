@@ -67,18 +67,18 @@ $colors: (
 ) !default;
 // scss-docs-end colors-map
 
-$primary: #ef4123 !default;
-$secondary: #111c30 !default;
-$tertiary: #0f385a !default;
+$primary: #45687c !default;
+$secondary: #3a3a3c !default;
+$tertiary: #d0d1c9 !default;
 $success: $green !default;
 $info: $cyan !default;
 $warning: $yellow !default;
 $danger: $red !default;
 $light: $gray-200 !default;
 $dark: $gray-800 !default;
-$navbar: #ef4123 !default;
-$footer: #111c30 !default;
-$buttons: #ef4123 !default;
+$navbar: #45687c !default;
+$footer: #3a3a3c !default;
+$buttons: #45687c !default;
 $primary-85: rgba($primary, .85) !default;
 $secondary-85: rgba($secondary, .85) !default;
 $tertiary-85: rgba($tertiary, .85) !default;

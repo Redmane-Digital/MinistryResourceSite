@@ -4,20 +4,21 @@
  * See file LICENSE for full license details.                                                   *
  ************************************************************************************************/
 
-import React from "react"
-import LiveSearchBox from "../universal/search/LiveSearchBox"
-import HeroSection from "./index"
+import React from 'react';
+import LiveSearchBox from '../universal/search/LiveSearchBox';
+import HeroSection from './index';
+import config from './config';
 
 const Hero = ({
   imgSources,
   title,
   text,
-  placeholder = "Ex. Streaming our Worship Service",
+  placeholder = 'Ex. Streaming our Worship Service',
   fullWidth = false,
   location,
   imgStyles = {},
 }) => {
-  const heroWidth = fullWidth ? "" : "reduced-width"
+  const heroWidth = fullWidth ? '' : 'reduced-width';
 
   return (
     <HeroSection
@@ -27,10 +28,8 @@ const Hero = ({
         minHeight: 400,
       }}
     >
-      <div
-        className="py-4 bg-tertiary-85"
-      >
-        <div className={`container text-white ${heroWidth}`}>
+      <div className={`py-4 bg-${config.colors.titleBg}`}>
+        <div className={`container text-${config.colors.title} ${heroWidth}`}>
           <h2 className="mb-0 font-weight-bold">{title}</h2>
         </div>
       </div>
@@ -41,7 +40,7 @@ const Hero = ({
         location={location}
       />
     </HeroSection>
-  )
-}
+  );
+};
 
-export default Hero
+export default Hero;
