@@ -20,6 +20,7 @@ import ContentTypeIcon from '../../components/atoms/ContentTypeIcon';
 import Fuse from 'fuse.js';
 import { useTranslateContext, useTranslations } from 'gatsby-plugin-translate';
 import config from './config';
+import { resourceBrands } from '../../config';
 
 const stopwords = {
   en: ['a', 'the', 'in', 'of', 'is', 'do', 'did', 'by'],
@@ -185,6 +186,11 @@ const Result = (props) => {
 
 const Search = ({ location, pageContext }) => {
   const { resources, books, thinkific: courses } = pageContext;
+  const sourcesObj = resourceBrands.reduce((acc, brand) => {
+    acc[brand.slug] = true;
+    return acc;
+  }, {});
+  const [sources, setSources] = useState(sourcesObj);
   const [filters, setFilters] = useState({
     pdf: false,
     video: false,
@@ -232,6 +238,11 @@ const Search = ({ location, pageContext }) => {
         ...categories,
         [e.target.id]: e.target.checked,
       });
+    } else if (Object.keys(sources).includes(e.target.id)) {
+      setSources({
+        ...sources,
+        [e.target.id]: e.target.checked,
+      });
     } else {
       setFilters({
         ...filters,
@@ -243,14 +254,40 @@ const Search = ({ location, pageContext }) => {
   const filterResults = () => {
     const filterArr = [];
     const categoriesArr = [];
+    const sourcesArr = [];
     let tmp;
 
     for (const f in filters) {
       if (filters[f]) filterArr.push(f);
     }
 
-    for (let c in categories) {
+    for (const c in categories) {
       if (categories[c]) categoriesArr.push(c);
+    }
+
+    for (const s in sources) {
+      if (sources[s]) sourcesArr.push(s);
+    }
+
+    /* If no sources are selected, all should be selected */
+    if (sourcesArr.length === 0) {
+      return setResults([]);
+    }
+
+    if (filterArr.length + categoriesArr.length === 0) {
+      if (sourcesArr.length == 2) {
+        return setResults(unfiltered);
+      }
+    }
+
+    if (sourcesArr.length) {
+      tmp = unfiltered.filter((res) => {
+        const matches =
+          res.item.tags &&
+          res.item.tags.some((tag) => sourcesArr.includes(tag.slug));
+
+        return matches;
+      });
     }
 
     if (filterArr.length + categoriesArr.length === 0)
@@ -369,10 +406,10 @@ const Search = ({ location, pageContext }) => {
     }
   };
 
-  useEffect(() => filterResults(), [filters, unfiltered, categories]);
+  useEffect(() => filterResults(), [filters, unfiltered, categories, sources]);
   useEffect(
     () => generateUnfiltered(),
-    [productTypes, resources, books, courses]
+    [productTypes, resources, books, courses, sources]
   );
 
   useEffect(() => {
@@ -400,6 +437,8 @@ const Search = ({ location, pageContext }) => {
       setCategories(newCategoriesState);
     }
   }, [cats]);
+
+  console.log(resourceBrands.length);
 
   return (
     <Layout location={location}>
@@ -447,6 +486,27 @@ const Search = ({ location, pageContext }) => {
             className="col-12 col-md-4 col-lg-3 mb-5"
             style={{ top: '1rem' }}
           >
+            {resourceBrands?.length > 1 && (
+              <div className="bg-light p-3 mb-3">
+                <p class="font-weight-bold">Resource Library</p>
+                {resourceBrands.map((brand, index) => (
+                  <div className="form-check" key={`brand_${index}`}>
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value=""
+                      id={brand.slug}
+                      checked={sources[brand.slug]}
+                      onClick={handleClick}
+                    />
+                    <label className="form-check-label" htmlFor={brand.slug}>
+                      {brand.title}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            )}
+
             <div className="bg-light p-3">
               <p className="font-weight-bold">{t`Include in search`}...</p>
               <div className="form-check">
@@ -489,6 +549,7 @@ const Search = ({ location, pageContext }) => {
                 </label>
               </div>
             </div>
+
             {productTypes.resources && (
               <>
                 <div className="bg-light p-3 mt-3">

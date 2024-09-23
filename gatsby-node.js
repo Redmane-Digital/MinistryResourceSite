@@ -14,12 +14,7 @@ const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
 const client = require('https');
-
-const resourceSite = {
-  enum: 'tfh_resource',
-  slug: 'tfh-resourcse',
-  title: 'TFH Resources',
-};
+const { resourceSite } = require('./src/config');
 
 // secret or salt to be hashed with
 const secret = 'mhresource';
@@ -131,20 +126,6 @@ const assignWhitelabelSettings = (config) => {
   // Update the logo in the site navbar
   let navbarJs = fs.readFileSync(
     `./src/components/organisms/navigation/index.js`,
-    {
-      encoding: 'utf8',
-    }
-  );
-  if (navbarJs) {
-    navbarJs = navbarJs.replace(/(?<=<img\s+src=")([^"]+)(?=")/gim, logo.url);
-
-    fs.writeFileSync(
-      `./src/components/organisms/navigation/index.js`,
-      navbarJs
-    );
-  }
-  let footerConfig = fs.readFileSync(
-    `./src/components/organisms/footer/config.js`,
     {
       encoding: 'utf8',
     }
@@ -919,7 +900,7 @@ exports.createPages = async ({ graphql, actions }) => {
   memo.raw.cms = await graphql(`
     query allResources {
       Hygraph {
-        books(where: {resourceSites: tfh_resource}) {
+        books(where: {resourceSites: ${resourceSite.enum}}) {
           author
           title
           tags {
