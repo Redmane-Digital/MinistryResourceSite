@@ -1,6 +1,6 @@
 const resourceSite = {
   enum: 'tfh_resource',
-  slug: 'mannahouse-resources',
+  slug: 'tfh-resource',
   title: 'TFH Resources',
 };
 

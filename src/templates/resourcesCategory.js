@@ -14,14 +14,17 @@ import { useTranslateContext, useTranslations } from 'gatsby-plugin-translate';
 import ContentTypeIcon from '../components/atoms/ContentTypeIcon';
 import { Link } from 'gatsby';
 import { translateLink } from '../hooks/';
+import { resourceBrands } from '../config';
 
 const Category = ({ location, pageContext }) => {
   const { language } = useTranslateContext();
   const t = useTranslations();
-
-  console.log(pageContext);
-
   const data = pageContext.category;
+  const sourcesObj = resourceBrands.reduce((obj, brand) => {
+    obj[brand.slug] = true;
+    return obj;
+  }, {});
+  const [sources, setSources] = useState(sourcesObj);
   const [items, setItems] = useState({
     featured: [],
     resource: [],
@@ -36,44 +39,89 @@ const Category = ({ location, pageContext }) => {
   });
 
   const handleClick = (e) => {
-    setFilters({
-      ...filters,
-      [e.target.id]: e.target.checked,
-    });
+    if (sources.hasOwnProperty(e.target.id)) {
+      setSources({
+        ...sources,
+        [e.target.id]: e.target.checked,
+      });
+    } else {
+      setFilters({
+        ...filters,
+        [e.target.id]: e.target.checked,
+      });
+    }
   };
 
   useEffect(() => {
     const filterArr = [];
-    let tmp = {
-      featured: [],
-      resource: [],
+    const srcArray = [];
+    const defaultVals = {
+      featured: data.featured,
+      resource: data.resource,
     };
 
-    for (let f in filters) {
+    let tmp = false;
+
+    for (const f in filters) {
       if (filters[f]) filterArr.push(f);
     }
 
-    if (filterArr.length > 0) {
-      tmp.featured = data.featured.filter((res) => {
-        const matches =
-          res.contentTypes &&
-          res.contentTypes.some((type) => filterArr.includes(type));
-        return matches;
-      });
-      tmp.resource = data.resource.filter((res) => {
-        const matches =
-          res.contentTypes &&
-          res.contentTypes.some((type) => filterArr.includes(type));
-        return matches;
+    for (const s in sources) {
+      if (sources[s]) srcArray.push(s);
+    }
+
+    /* If there are no sources selected, return nothing */
+    if (srcArray.length === 0) {
+      return setItems({
+        featured: [],
+        resource: [],
       });
     } else {
-      tmp = {
-        featured: data.featured,
-        resource: data.resource,
-      };
+      tmp = defaultVals;
     }
+
+    if (srcArray.length) {
+      tmp.featured = tmp.featured.filter((res) => {
+        const matches =
+          (res.tags && res.tags.some((tag) => srcArray.includes(tag.slug))) ||
+          (res.resourceSites &&
+            res.resourceSites.some((site) =>
+              srcArray.includes(site.replaceAll('_', '-'))
+            ));
+
+        return matches;
+      });
+
+      tmp.resource = tmp.resource.filter((res) => {
+        const matches =
+          (res.tags && res.tags.some((tag) => srcArray.includes(tag.slug))) ||
+          (res.resourceSites &&
+            res.resourceSites.some((site) =>
+              srcArray.includes(site.replaceAll('_', '-'))
+            ));
+
+        return matches;
+      });
+    }
+
+    if (filterArr.length > 0) {
+      tmp.featured = tmp.featured.filter((res) => {
+        const matches =
+          res.contentTypes &&
+          res.contentTypes.some((type) => filterArr.includes(type));
+        return matches;
+      });
+
+      tmp.resource = tmp.resource.filter((res) => {
+        const matches =
+          res.contentTypes &&
+          res.contentTypes.some((type) => filterArr.includes(type));
+        return matches;
+      });
+    }
+
     setItems(tmp);
-  }, [filters]);
+  }, [filters, sources]);
 
   return (
     <Layout location={location}>
@@ -123,6 +171,26 @@ const Category = ({ location, pageContext }) => {
         </h1>
         <div className="row">
           <div className="col-12 col-md-4 col-lg-3 mb-5">
+            {resourceBrands?.length > 1 && (
+              <div className="bg-light p-3 mb-3">
+                <p class="font-weight-bold">Resource Library</p>
+                {resourceBrands.map((brand, index) => (
+                  <div className="form-check" key={`brand_${index}`}>
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value=""
+                      id={brand.slug}
+                      checked={sources[brand.slug]}
+                      onClick={handleClick}
+                    />
+                    <label className="form-check-label" htmlFor={brand.slug}>
+                      {brand.title}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            )}
             <div className="bg-light p-3">
               <p className="font-weight-bold">Content Type</p>
               <div className="form-check">

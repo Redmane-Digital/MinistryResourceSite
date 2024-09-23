@@ -916,6 +916,7 @@ exports.createPages = async ({ graphql, actions }) => {
             handle
             height
           }
+          resourceSites
         }
         siteConfig(where: { title: "${resourceSite.title}" }) {
           aboutSite {
@@ -1027,6 +1028,7 @@ exports.createPages = async ({ graphql, actions }) => {
             tags {
               slug
             }
+            resourceSites
           }
           heroImage {
             url
@@ -1079,26 +1081,28 @@ exports.createPages = async ({ graphql, actions }) => {
               html
             }
           }
+          resourceSites
         }
         allHygraphCourseBundles: courseBundles(
           where: { resourceSites: ${resourceSite.enum} }
         ) {
-          slug
-          subtitle
-          name
-          instructor
-          id
-          course_card_image_url
-          description
           categories {
             title
             slug
           }
+          course_card_image_url
+          description
+          id
+          instructor
           localizations {
             name
             description
             locale
           }
+          name
+          resourceSites
+          slug
+          subtitle
           type
         }
         homepage(where: { resourceSite: ${resourceSite.enum} }) {

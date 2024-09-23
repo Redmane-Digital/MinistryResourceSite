@@ -186,9 +186,9 @@ const Result = (props) => {
 
 const Search = ({ location, pageContext }) => {
   const { resources, books, thinkific: courses } = pageContext;
-  const sourcesObj = resourceBrands.reduce((acc, brand) => {
-    acc[brand.slug] = true;
-    return acc;
+  const sourcesObj = resourceBrands.reduce((obj, brand) => {
+    obj[brand.slug] = true;
+    return obj;
   }, {});
   const [sources, setSources] = useState(sourcesObj);
   const [filters, setFilters] = useState({
@@ -283,8 +283,12 @@ const Search = ({ location, pageContext }) => {
     if (sourcesArr.length) {
       tmp = unfiltered.filter((res) => {
         const matches =
-          res.item.tags &&
-          res.item.tags.some((tag) => sourcesArr.includes(tag.slug));
+          (res.item.tags &&
+            res.item.tags.some((tag) => sourcesArr.includes(tag.slug))) ||
+          (res.item.resourceSites &&
+            res.item.resourceSites.some((site) =>
+              sourcesArr.includes(site.replaceAll('_', '-'))
+            ));
 
         return matches;
       });
